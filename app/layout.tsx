@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
+
 import { Inter, Space_Grotesk } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import * as Context from "../context";
 
@@ -32,7 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
-        <Context.ThemeProvider>{children}</Context.ThemeProvider>
+        <ClerkProvider>
+          <Context.ThemeProvider>{children}</Context.ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
