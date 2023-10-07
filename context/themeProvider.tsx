@@ -2,11 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type Mode = "light" | "dark" | undefined;
+export type Mode = "light" | "dark" | "system" | undefined;
 
 export interface ThemeContextTypes {
   mode: Mode;
-  handleThemeChange: () => void;
+  setMode: (mode: Mode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextTypes | undefined>(undefined);
@@ -14,26 +14,26 @@ const ThemeContext = createContext<ThemeContextTypes | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [mode, setMode] = useState<Mode>();
 
-  const isThemeInStorage = "theme" in localStorage;
-  const isDarkModeStorage = localStorage.theme === "dark";
-  const isDarkModePreferred = window.matchMedia(
-    "(prefers-color-schema:dark)"
-  ).matches;
-
   const handleThemeChange = () => {
-    if (mode == "dark") {
-      setMode("light");
-      localStorage.setItem("theme", "light");
-      document.documentElement.classList.add("light");
-    } else {
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-colors-scheme:dark)").matches)
+    ) {
       setMode("dark");
-      localStorage.setItem("theme", "dark");
       document.documentElement.classList.add("dark");
+    } else {
+      setMode("light");
+      document.documentElement.classList.remove("dark");
     }
   };
 
+  useEffect(() => {
+    handleThemeChange();
+  }, [mode]);
+
   return (
-    <ThemeContext.Provider value={{ mode, handleThemeChange }}>
+    <ThemeContext.Provider value={{ mode, setMode }}>
       {children}
     </ThemeContext.Provider>
   );

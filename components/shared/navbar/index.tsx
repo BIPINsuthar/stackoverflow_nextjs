@@ -1,16 +1,11 @@
-"use client";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-
-import * as Context from "../../../context";
-import * as Constants from "../../../constants";
+import { Theme } from "./Theme";
 
 export const NavBar = () => {
-  const { mode, handleThemeChange } = Context.useTheme();
-
   return (
-    <nav className="background-light850_dark100 flex items-center justify-between sm:px-12 p-6 w-full shadow-light-300">
+    <nav className="background-light850_dark100 flex items-center justify-between sm:px-12 p-6 w-full shadow-light-300 fixed z-50">
       <Link href={"/"} className="flex items-center gap-2">
         <Image
           width={23}
@@ -25,19 +20,7 @@ export const NavBar = () => {
       </Link>
       GlobalSearch
       <div className="flex items-center gap-4">
-        {Constants.themes.map((item) => {
-          return (
-            <Image
-              onClick={() => handleThemeChange()}
-              width={23}
-              height={23}
-              src={`/assets/icons/${
-                item.value == "dark" ? "sun.svg" : "moon.svg"
-              }`}
-              alt="Dev"
-            />
-          );
-        })}
+        <Theme />
         <SignedIn>
           <UserButton
             appearance={{
@@ -51,7 +34,7 @@ export const NavBar = () => {
             afterSignOutUrl="/"
           />
         </SignedIn>
-        {/* MobileNavigationBar */}
+        MobileNavigationBar
       </div>
     </nav>
   );
