@@ -7,7 +7,7 @@ export default function Profile() {
   return (
     <section className="flex flex-1 flex-col gap-6">
       {/* header section */}
-      <div className="flex items-start">
+      <div className="flex items-start max-md-col">
         <Image
           width={140}
           height={140}
@@ -16,7 +16,7 @@ export default function Profile() {
           className="invert-colors"
         />
         <div className="flex flex-col gap-4">
-          <div className="flex-between">
+          <div className="flex-between max-md-col">
             <h1 className="h1-bold text-dark100_light900">Faizan JSM</h1>
             <Button title="Edit Profile" type="light" width="fit" />
           </div>
@@ -40,15 +40,14 @@ export default function Profile() {
           </p>
         </div>
       </div>
-
       <p className="paragram-medium text-dark200_light800">Stats</p>
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-4 flex-wrap">
         <AchivementCard />
         <AchivementCard />
         <AchivementCard />
         <AchivementCard />
       </div>
-      <div className="flex items-start gap-6">
+      <div className="flex items-start gap-6 max-md-col">
         <div className="flex flex-[0.6] flex-col items-center gap-4">
           <h2 className="h2-semibold text-dark200_light900">Top Posts</h2>
           <QuestionCard />
@@ -58,7 +57,7 @@ export default function Profile() {
         </div>
         <div className="flex flex-[0.4] flex-col gap-4">
           <h2 className="h2-semibold text-dark200_light900">Top Tags</h2>
-          <div className="flex-between">
+          <div className="flex-between gap-2">
             <Tag label="JAVASCRIPTI" />
             <Tag label="JAVASCRIPTI" />
           </div>

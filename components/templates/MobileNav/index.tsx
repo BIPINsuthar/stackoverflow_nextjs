@@ -27,22 +27,23 @@ export const MobileNav = () => {
         />
       </SheetTrigger>
       <SheetContent side="left" className="background-light900_dark300">
-        <Link href={"/"} className="flex items-center gap-2">
-          <Image
-            width={23}
-            height={23}
-            src="/assets/images/site-logo.svg"
-            alt="Dev"
-          />
-          <p className="h2-bold font-spaceGrotesk text-dark100_light900">
-            Dev
-            <span className="text-primary-500">Overflow</span>
-          </p>
-        </Link>
+        <SheetClose asChild>
+          <Link href={"/"} className="flex items-center gap-2">
+            <Image
+              width={23}
+              height={23}
+              src="/assets/images/site-logo.svg"
+              alt="Dev"
+            />
+            <p className="h2-bold font-spaceGrotesk text-dark100_light900">
+              Dev
+              <span className="text-primary-500">Overflow</span>
+            </p>
+          </Link>
+        </SheetClose>
         <div className="flex flex-col gap-4">
-          <SheetClose>
-            <Organisms.NavContent />
-          </SheetClose>
+          <Organisms.NavContent />
+
           <SignedOut>
             <div className="flex flex-col gap-4">
               <SheetClose asChild>

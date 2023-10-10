@@ -9,7 +9,9 @@ export const Country = () => {
         height={16}
         src={"/assets/icons/avatar.svg"}
       />
-      <p className="text-dark400_light700 body-medium">Melbourne, AU</p>
+      <p className="text-dark400_light700 body-medium line-clamp-1">
+        Melbourne, AU
+      </p>
     </section>
   );
 };

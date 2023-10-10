@@ -45,6 +45,10 @@ body {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
   }
 
+  .max-md-col {
+    @apply max-md:flex-col max-md:items-start max-md:gap-2;
+  }
+
   .dark-gradient {
     background: linear-gradient(
       232deg,

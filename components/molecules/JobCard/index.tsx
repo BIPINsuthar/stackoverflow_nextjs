@@ -9,9 +9,10 @@ export const JobCard = () => {
         alt="Avtar"
         width={64}
         height={64}
+        className="invert-colors"
       />
       <div className="flex flex-col gap-4">
-        <div className="flex-between">
+        <div className="flex-between max-lg:flex-col max-lg:items-start max-lg:gap-2">
           <div className="flex items-center gap-3">
             <p className="base-semibold text-dark200_light900">
               Principal Salesforce Developer
