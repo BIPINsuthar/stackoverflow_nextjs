@@ -40,12 +40,13 @@ export default function Profile() {
           </p>
         </div>
       </div>
-      <p className="paragram-medium text-dark200_light800">Stats</p>
+      <p className="paragram-medium text-dark200_light800">Stars</p>
       <div className="flex items-center gap-4 flex-wrap">
-        <AchivementCard />
-        <AchivementCard />
-        <AchivementCard />
-        <AchivementCard />
+        {/* <AchivementCard /> */}
+
+        <AchivementCard type="Gold" />
+        <AchivementCard type="Silver" />
+        <AchivementCard type="Bronze" />
       </div>
       <div className="flex items-start gap-6 max-md-col">
         <div className="flex flex-[0.6] flex-col items-center gap-4">
