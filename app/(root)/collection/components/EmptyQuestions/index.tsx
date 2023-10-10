@@ -7,7 +7,7 @@ export const EmptyQuestions = () => {
   const { mode } = useTheme();
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
+    <section className="flex flex-1 flex-col items-center justify-center gap-4">
       <Image
         src={`/assets/images/${
           mode == "dark" ? "dark-illustration.png" : "light-illustration.png"

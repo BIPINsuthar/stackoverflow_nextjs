@@ -1,8 +1,9 @@
 import { Props } from "./types";
 
-export const Button = ({ title, type, width }: Props) => {
+export const Button = ({ title, type, width, onClick }: Props) => {
   return (
     <button
+      onClick={onClick}
       className={`${
         type == "gradient"
           ? "primary-gradient"
