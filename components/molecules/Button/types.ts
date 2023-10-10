@@ -1,4 +1,5 @@
 export interface Props {
   title: string;
-  type?: "primary" | "secondary";
+  type?: "secondary" | "light" | "dark" | "gradient";
+  width?: "fit" | "full";
 }
