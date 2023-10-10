@@ -25,12 +25,12 @@ export const Theme = () => {
             width={16}
             height={16}
             src={`/assets/icons/${mode == "light" ? "sun.svg" : "moon.svg"}`}
-            className="cursor-pointer"
+            className="cursor-pointer active-theme"
             alt="Dev"
           />
         </MenubarTrigger>
         <MenubarContent
-          className={`absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 backgroud-light900_dark300`}
+          className={`absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 background-light900_dark300`}
         >
           {Constants.themes.map((item) => {
             return (
@@ -44,13 +44,13 @@ export const Theme = () => {
                       localStorage.removeItem("theme");
                     }
                   }}
-                  className="flex items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400 focus:bg-light-800"
+                  className="flex items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400 focus:bg-light-800 "
                 >
                   <Image
                     width={16}
                     height={16}
                     src={item.icon}
-                    className=" text-primary-500"
+                    className={`${item.value === mode && "active-theme"}`}
                     alt="Dev"
                   />
                   <p

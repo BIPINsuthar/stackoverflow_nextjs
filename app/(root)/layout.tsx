@@ -1,16 +1,15 @@
 import React from "react";
 
-import * as Components from "../../components";
-import { NavBar } from "@/components/shared";
+import { LeftSideBar, NavBar, RightSideBar } from "@/components/shared";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="background-light850_dark100 relative">
       <NavBar />
-      <div className="flex bg-red-500">
-        LeftSideBar
-        <section>{children}</section>
-        RightSideBar
+      <div className="flex">
+        <LeftSideBar />
+        <section className="flex flex-1 min-h-screen">{children}</section>
+        <RightSideBar />
       </div>
     </main>
   );
