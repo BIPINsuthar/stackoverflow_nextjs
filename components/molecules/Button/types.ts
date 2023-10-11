@@ -3,4 +3,5 @@ export interface Props {
   type?: "secondary" | "light" | "dark" | "gradient";
   width?: "fit" | "full";
   onClick?: () => void;
+  isDisabled?: boolean;
 }

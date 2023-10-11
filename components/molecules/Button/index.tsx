@@ -1,11 +1,13 @@
 import { Props } from "./types";
 
-export const Button = ({ title, type, width, onClick }: Props) => {
+export const Button = ({ title, type, width, onClick, isDisabled }: Props) => {
   return (
     <button
-      onClick={onClick}
+      onClick={isDisabled ? undefined : onClick}
       className={`${
-        type == "gradient"
+        isDisabled
+          ? "bg-gray-500"
+          : type == "gradient"
           ? "primary-gradient"
           : type == "light"
           ? "light-border-2 border background-light800_dark400"
@@ -18,14 +20,16 @@ export const Button = ({ title, type, width, onClick }: Props) => {
     >
       <span
         className={`${
-          type == "light"
+          isDisabled
+            ? "text-light-700"
+            : type == "light"
             ? "text-dark300_light900"
             : type == "secondary"
             ? "primary-text-gradient"
             : "text-dark400_light900"
         } paragraph-medium`}
       >
-        {title}
+        {isDisabled ? "Submiting..." : title}
       </span>
     </button>
   );

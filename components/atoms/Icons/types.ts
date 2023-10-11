@@ -14,6 +14,7 @@ export type IconType =
   | "chevron-right"
   | "clock-2"
   | "clock"
+  | "close"
   | "computer"
   | "currency-dollar-circle"
   | "downvote"
@@ -50,4 +51,5 @@ export interface Props {
   className?: string;
   size?: number;
   color?: string;
+  onClick?: () => void;
 }

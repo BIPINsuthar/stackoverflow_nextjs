@@ -1,10 +1,15 @@
 import Image from "next/image";
+
 import * as Molecules from "../../molecules";
 import { Icons } from "@/components/atoms";
+import { Props } from "./types";
 
-export const QuestionCard = () => {
+export const QuestionCard = ({ onClick }: Props) => {
   return (
-    <section className="flex flex-col gap-6 rounded-lg background-light900_dark200 p-6 light-border-2 border">
+    <section
+      onClick={onClick}
+      className="flex flex-col gap-6 rounded-lg background-light900_dark200 p-6 light-border-2 border cursor-pointer"
+    >
       <h3 className="h3-semibold text-dark200_light900 line-clamp-2">
         The Lightning Component c:LWC_PizzaTracker generated invalid output for
         field status. Error How to solve this
