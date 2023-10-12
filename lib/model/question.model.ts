@@ -61,4 +61,4 @@ const questionSchema = new Schema({
   },
 });
 
-export const Question = models.Question || model("Question", questionSchema);
+export const Question = models?.Question || model("Question", questionSchema);

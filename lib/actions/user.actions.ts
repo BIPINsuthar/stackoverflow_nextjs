@@ -30,14 +30,17 @@ export async function deleteUser(clearkId: string) {
   }
 }
 
-export async function getUserById(params: { userId: string }) {
+export async function getUserById(userId: string) {
   try {
     connectToDatabase();
-    const { userId } = params;
 
-    await Models.User.findOne({
+    const user = await Models.User.findOne({
       clerkId: userId,
     });
+
+    if (!user) throw new Error("User not found!");
+
+    return user;
   } catch (error) {
     console.log(error);
     throw error;

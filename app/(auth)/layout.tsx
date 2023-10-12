@@ -3,5 +3,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <main>{children}</main>;
+  return (
+    <main className="background-light850_dark100 relative">{children}</main>
+  );
 }

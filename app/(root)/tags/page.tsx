@@ -1,4 +1,3 @@
-import { GlobalSearch } from "@/components/molecules";
 import { TagCard } from "@/components/organisms";
 
 export default function Tags() {

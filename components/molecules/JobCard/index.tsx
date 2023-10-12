@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Country, Tag } from "../Badges";
+import { Icons } from "@/components/atoms";
 
 export const JobCard = () => {
   return (
@@ -21,29 +22,19 @@ export const JobCard = () => {
           </div>
           <Country />
         </div>
-        <p className="body-regular text-dark500_light700">
+        <p className="body-regular text-dark500_light700 line-clamp-2">
           About the Company Join AT&T and reimagine the communications and
           technologies that connect the world.
         </p>
         <div className="flex-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
-                src={"/assets/icons/calendar.svg"}
-                alt="Avtar"
-                width={20}
-                height={20}
-              />
+              <Icons size={20} type="clock-2" />
               <p className="text-light-500 body-medium">full-time</p>
             </div>
             <div className="flex items-center gap-2">
-              <Image
-                src={"/assets/icons/calendar.svg"}
-                alt="Avtar"
-                width={20}
-                height={20}
-              />
-              <p className="text-light-500 body-medium">full-time</p>
+              <Icons size={20} type="currency-dollar-circle" />
+              <p className="text-light-500 body-medium">100-200</p>
             </div>
           </div>
           <div className="flex items-center gap-2 cursor-pointer">

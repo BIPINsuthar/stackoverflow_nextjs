@@ -17,7 +17,7 @@ interface AskQustionProps {
   tag: string;
 }
 
-export const Question = () => {
+export const Question = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathName = usePathname();
 
@@ -40,7 +40,7 @@ export const Question = () => {
         await Actions.createQuestion({
           title: values.questionTitle,
           content: values.problemExplanation,
-          auther: "65267af5f0c8b92da6d4bccb",
+          auther: userId,
           tags: values.tags,
           path: pathName!,
         });

@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-export const GlobalSearch = () => {
+export const SearchBar = () => {
   return (
-    <section className="w-full relative max-w-[600px] max-lg:hidden light-border-2 border rounded-lg">
+    <section className="w-full relative max-lg:hidden light-border border rounded-lg">
       <Image
         src={"/assets/icons/search.svg"}
         width={20}

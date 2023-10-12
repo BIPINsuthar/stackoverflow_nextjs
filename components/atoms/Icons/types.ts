@@ -44,7 +44,9 @@ export type IconType =
   | "upvote"
   | "upvoted"
   | "user"
-  | "users";
+  | "users"
+  | "filled-down-votes"
+  | "filled-up-votes";
 
 export interface Props {
   type: IconType;

@@ -1,10 +1,18 @@
 import { Icons } from "@/components/atoms";
 import { Props } from "./tyeps";
 
-export const Tag = ({ label, onDelete }: Props) => {
+export const Tag = ({ label, onDelete, size, isActive }: Props) => {
   return (
-    <section className="background-light800_dark300 flex gap-2 rounded-md p-2 w-fit">
-      <p className="text-light400_light500 subtle-medium line-clamp-1">
+    <section
+      className={`cursor-pointer background-light800_dark300 flex gap-2 rounded-md w-fit ${
+        size == "big" ? "p-3" : "p-2"
+      }`}
+    >
+      <p
+        className={`${
+          isActive ? "primary-text-gradient" : "text-light400_light500"
+        } ${size == "big" ? "body-medium" : "subtle-medium"} line-clamp-1`}
+      >
         {label.toUpperCase()}
       </p>
       {onDelete && (
