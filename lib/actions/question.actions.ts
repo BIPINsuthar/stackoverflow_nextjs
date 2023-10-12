@@ -23,7 +23,7 @@ export async function getAllQuestion() {
 
     return questions as Question[];
   } catch (error) {
-    console.log("error while getting questions data", error);
+    console.log("error while questions data", error);
   }
 }
 
