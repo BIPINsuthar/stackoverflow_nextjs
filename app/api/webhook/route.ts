@@ -4,7 +4,7 @@ import type { WebhookRequiredHeaders } from "svix";
 import type { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 
-import * as Actions from "../../.././lib/actions";
+import * as Actions from "../../../lib/actions";
 import { NextResponse } from "next/server";
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET ?? "";
