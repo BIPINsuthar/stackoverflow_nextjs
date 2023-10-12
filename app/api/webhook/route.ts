@@ -7,9 +7,9 @@ import { Webhook } from "svix";
 import * as Actions from "../../../lib/actions";
 import { NextResponse } from "next/server";
 
-const webhookSecret: string = process.env.WEBHOOK_SECRET ?? "";
+const webhookSecret: string = process.env.WEBHOOK_SECRET!;
 
-export default async function handler(
+export default async function POST(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse
 ) {
