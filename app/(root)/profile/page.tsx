@@ -60,9 +60,7 @@ export default function Profile() {
       <div className="flex items-start gap-6 max-md-col">
         <div className="flex flex-[0.6] flex-col items-center gap-4">
           <h2 className="h2-semibold text-dark200_light900">Top Posts</h2>
-          <QuestionCard />
-          <QuestionCard />
-          <QuestionCard />
+
           <Button title="Load More" type="secondary" width="fit" />
         </div>
         <div className="flex flex-[0.4] flex-col gap-4">

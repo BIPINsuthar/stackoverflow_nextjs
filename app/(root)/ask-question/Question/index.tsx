@@ -42,7 +42,7 @@ export const Question = () => {
           content: values.problemExplanation,
           auther: "65267af5f0c8b92da6d4bccb",
           tags: values.tags,
-          path: pathName,
+          path: pathName!,
         });
         router.push("/");
       } catch (error) {

@@ -14,7 +14,7 @@ export const QuestionCard = ({ onClick, title, tags }: Props) => {
         {title}
       </h3>
       <div className="flex items-center flex-grow gap-2">
-        {tags.map((item) => {
+        {tags?.map((item) => {
           return <Molecules.Badges.Tag key={item.name} label={item.name} />;
         })}
       </div>

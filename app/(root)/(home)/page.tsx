@@ -8,9 +8,7 @@ const Home = async () => {
   return (
     <div className="flex flex-1 flex-col gap-4">
       {Questions?.map((item) => {
-        return (
-          <QuestionCard key={item.title} title={item.title} tags={item.tags} />
-        );
+        return <QuestionCard key={item.title} title={item.title} />;
       })}
     </div>
   );

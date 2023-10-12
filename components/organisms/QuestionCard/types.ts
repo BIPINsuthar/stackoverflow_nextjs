@@ -4,7 +4,7 @@ import { Date } from "mongoose";
 export interface Props {
   onClick?: () => void;
   title: string;
-  tags: Tag[];
+  tags?: Tag[];
 }
 
 export type Tag = {
