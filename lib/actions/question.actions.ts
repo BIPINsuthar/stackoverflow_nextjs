@@ -34,7 +34,6 @@ export async function createQuestion(params: {
   auther: string;
   path: string;
 }) {
-  console.log("inside server");
   try {
     connectToDatabase();
     const { title, content, tags, auther, path } = params;

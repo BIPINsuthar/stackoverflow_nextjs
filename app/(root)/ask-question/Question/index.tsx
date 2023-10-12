@@ -36,7 +36,6 @@ export const Question = () => {
       tag: Yup.string().max(15, "tag must be less than 15 character"),
     }),
     onSubmit: async (values) => {
-      console.log("im calling", values);
       try {
         await Actions.createQuestion({
           title: values.questionTitle,
