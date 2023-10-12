@@ -7,7 +7,7 @@ export default function Tags() {
       <h1 className="h1-bold text-dark100_light900">Tags</h1>
       <div className="flex items-center gap-2 flex-wrap">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => {
-          return <TagCard />;
+          return <TagCard key={item} />;
         })}
       </div>
     </section>

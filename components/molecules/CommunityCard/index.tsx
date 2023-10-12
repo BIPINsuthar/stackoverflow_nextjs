@@ -15,7 +15,7 @@ export const CommunityCard = () => {
       <p className="body-regular text-dark500_light500">@bobur_mavlonov</p>
       <div className="flex flex-wrap items-center gap-4 pt-1">
         {[1, 2, 3].map((item) => {
-          return <Tag label="Javascript" />;
+          return <Tag key={item} label="Javascript" />;
         })}
       </div>
     </div>

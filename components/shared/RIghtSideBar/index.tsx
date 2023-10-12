@@ -1,4 +1,3 @@
-import { Molecules } from "@/components";
 import { Badges } from "@/components/molecules";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +12,7 @@ export const RightSideBar = () => {
         <div className="flex flex-col gap-6">
           {[1, 2, 3, 4].map((item) => {
             return (
-              <Link href={"/"} className="flex-between">
+              <Link key={item} href={"/"} className="flex-between">
                 <p className="text-dark500_light700 body-medium">
                   Would it be appropriate to point out an error in another paper
                   during a referee report?

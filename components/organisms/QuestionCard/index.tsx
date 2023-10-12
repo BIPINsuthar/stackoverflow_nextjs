@@ -4,19 +4,18 @@ import * as Molecules from "../../molecules";
 import { Icons } from "@/components/atoms";
 import { Props } from "./types";
 
-export const QuestionCard = ({ onClick }: Props) => {
+export const QuestionCard = ({ onClick, title, tags }: Props) => {
   return (
     <section
       onClick={onClick}
       className="flex flex-col gap-6 rounded-lg background-light900_dark200 p-6 light-border-2 border cursor-pointer"
     >
       <h3 className="h3-semibold text-dark200_light900 line-clamp-2">
-        The Lightning Component c:LWC_PizzaTracker generated invalid output for
-        field status. Error How to solve this
+        {title}
       </h3>
       <div className="flex items-center flex-grow gap-2">
-        {["javascript", "reactnative", "nextjs", "nodejs"].map((item) => {
-          return <Molecules.Badges.Tag label={item} />;
+        {tags.map((item) => {
+          return <Molecules.Badges.Tag key={item.name} label={item.name} />;
         })}
       </div>
       <div className="text-dark400_light700 flex items-center justify-between  max-lg:flex-col max-lg:items-start max-lg:gap-2">

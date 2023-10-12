@@ -36,6 +36,7 @@ export const Theme = () => {
             return (
               <>
                 <MenubarItem
+                  key={item.value}
                   onClick={() => {
                     setMode(item.value);
                     if (item.value != "system") {

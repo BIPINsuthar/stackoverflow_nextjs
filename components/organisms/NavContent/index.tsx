@@ -15,7 +15,7 @@ export const NavContent = () => {
         const isActive = pathName == item.route;
 
         return (
-          <SheetClose asChild>
+          <SheetClose asChild key={item.route}>
             <Link href={item.route}>
               <Molecules.ListMenu
                 title={item.label}
