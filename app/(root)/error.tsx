@@ -19,8 +19,8 @@ const ErrorComponent = ({
   };
 
   return (
-    <div className="min-h-full flex items-center justify-center">
-      <div className="background-light800_dark300 mb-10 shadow-lg rounded-lg p-8 max-w-md w-full light-border border">
+    <div className="flex justify-center pt-32">
+      <div className="background-light800_dark300 shadow-lg  rounded-lg p-8 max-w-md w-full light-border border">
         <h1 className="text-4xl font-bold text-red-500 mb-4">Error</h1>
         <p className="text-lg text-dark100_light900 mb-1">
           {error.message || "An error occurred."}

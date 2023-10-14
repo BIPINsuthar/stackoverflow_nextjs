@@ -46,7 +46,9 @@ export default function RootLayout({
               dividerLine: "bg-gray-500",
               dividerText: "text-primary-500",
               formFieldLabel: "paragraph-semibold text-dark400_light800",
-              formFieldInput: " background-light800_dark300",
+              formFieldInput:
+                "background-light800_dark300 text-dark300_light800",
+              formFieldInput__emailAddress: "text-dark300_light800",
               footerActionText: "text-dark400_light700",
               footerActionLink: "primary-text-gradient",
               formFieldWarningText: "text-red-600",
