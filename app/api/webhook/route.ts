@@ -15,6 +15,8 @@ export async function POST(req: Request) {
     );
   }
 
+  console.log("print webhook secreate", WEBHOOK_SECRET);
+
   // Get the headers
   const headerPayload = headers();
   const svix_id = headerPayload.get("svix-id");
