@@ -54,7 +54,7 @@ export async function createUser(userData: Partial<Models.IUser>) {
     const newUser = await Models.User.create(userData);
     return newUser;
   } catch (error) {
-    console.log(error);
+    console.log("create user error", error);
     throw error;
   }
 }

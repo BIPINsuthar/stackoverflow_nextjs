@@ -15,8 +15,6 @@ export async function POST(req: Request) {
     );
   }
 
-  console.log("print webhook secreate", WEBHOOK_SECRET);
-
   // Get the headers
   const headerPayload = headers();
   const svix_id = headerPayload.get("svix-id");
@@ -57,8 +55,7 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  console.log("Webhook event Type:", eventType);
 
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
@@ -71,6 +68,7 @@ export async function POST(req: Request) {
       picture: image_url,
       username: username ?? "",
     });
+    console.log("mongoUser", mongoUser);
     return NextResponse.json({ message: "OK", user: mongoUser });
   }
 
