@@ -72,3 +72,24 @@ export async function createQuestion(params: {
     console.log("creating question", error);
   }
 }
+
+export async function getQuestionById(questionId: string) {
+  try {
+    const question = (await Models.Question.findById(questionId)
+      .populate({
+        path: "tags",
+        model: Models.Tag,
+        select: "_id name",
+      })
+      .populate({
+        path: "auther",
+        model: Models.User,
+        select: "_id clerkId name picture",
+      })) as Question;
+
+    return question;
+  } catch (error) {
+    console.log("error while getQuestionByid", error);
+    throw error;
+  }
+}

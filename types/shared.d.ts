@@ -1,4 +1,5 @@
 export type Tag = {
+  _id: string;
   name: string;
   description: string;
   questions: Question[];
@@ -7,6 +8,7 @@ export type Tag = {
 };
 
 export type User = {
+  _id: string;
   clerkId: string;
   name: string;
   username: string;
@@ -22,6 +24,7 @@ export type User = {
 };
 
 export type Question = {
+  _id: string;
   title: string;
   content: string;
   tags: Tag[];

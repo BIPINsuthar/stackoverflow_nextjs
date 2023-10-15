@@ -3,32 +3,32 @@ import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
 
-export async function deleteUser(clearkId: string) {
-  try {
-    connectToDatabase();
+// export async function deleteUser(clearkId: string) {
+//   try {
+//     connectToDatabase();
 
-    const user = await Models.User.findOneAndDelete({
-      clearkId: clearkId,
-    });
-    if (!user) {
-      throw new Error("User not found!");
-    }
-    const userQuestionsIds = await Models.Question.find({
-      auther: user._id,
-    }).distinct("_id");
+//     const user = await Models.User.findOneAndDelete({
+//       clearkId: clearkId,
+//     });
+//     if (!user) {
+//       throw new Error("User not found!");
+//     }
+//     const userQuestionsIds = await Models.Question.find({
+//       auther: user._id,
+//     }).distinct("_id");
 
-    //delete user questions
-    await Models.Question.deleteMany({ auther: user._id });
+//     //delete user questions
+//     await Models.Question.deleteMany({ auther: user._id });
 
-    const deleteUser = await Models.User.findByIdAndDelete(user._id);
+//     const deleteUser = await Models.User.findByIdAndDelete(user._id);
 
-    //todo:delete answare as well here using userQuestionId
-    return deleteUser;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
+//     //todo:delete answare as well here using userQuestionId
+//     return deleteUser;
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
 
 export async function getUserById(userId: string) {
   try {
@@ -37,12 +37,13 @@ export async function getUserById(userId: string) {
     const user = await Models.User.findOne({
       clerkId: userId,
     });
+    console.log("user", user);
 
     if (!user) throw new Error("User not found!");
 
     return user;
   } catch (error) {
-    console.log(error);
+    console.log("getUserByid", error);
     throw error;
   }
 }
@@ -81,6 +82,21 @@ export async function updateUser(params: UpdateUserParams) {
       }
     );
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getAllUsers() {
+  try {
+    connectToDatabase();
+
+    const allUsers = await Models.User.find({}).sort({
+      createdAt: -1,
+    });
+
+    return allUsers;
   } catch (error) {
     console.log(error);
     throw error;

@@ -1,16 +1,23 @@
 import Image from "next/image";
 import { Props } from "./types";
 
-export const Icons = ({ type, onClick, className, color, size }: Props) => {
+export const Icons = ({
+  type,
+  uri,
+  onClick,
+  className,
+  color,
+  size,
+}: Props) => {
   return (
     <Image
       onClick={onClick}
-      className={`invert-colors ${className}`}
+      className={`${!uri && "invert-colors"} ${className}`}
       color={color}
       width={size ?? 20}
       height={size ?? 20}
       alt="Image"
-      src={`/assets/icons/${type}.svg`}
+      src={uri ? uri : `/assets/icons/${type}.svg`}
     />
   );
 };

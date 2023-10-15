@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     const mongoUser = await Actions.createUser({
       clerkId: id,
       email: email_addresses[0].email_address,
-      name: `${first_name} ${last_name}`,
+      name: `${first_name} ${last_name ?? " "}`,
       picture: image_url,
       username: username ?? "",
     });
@@ -92,9 +92,10 @@ export async function POST(req: Request) {
 
   if (eventType == "user.deleted") {
     const { id } = evt.data;
-    const mongoDeletedUser = await Actions.deleteUser(id!);
+    // const mongoDeletedUser = await Actions.deleteUser(id!);
 
-    return NextResponse.json({ message: "OK", user: mongoDeletedUser });
+    alert("why");
+    // return NextResponse.json({ message: "OK", user: mongoDeletedUser });
   }
 
   return new Response("", { status: 201 });

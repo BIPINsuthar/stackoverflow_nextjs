@@ -49,9 +49,10 @@ export type IconType =
   | "filled-up-votes";
 
 export interface Props {
-  type: IconType;
+  type?: IconType;
   className?: string;
   size?: number;
   color?: string;
   onClick?: () => void;
+  uri?: string;
 }

@@ -11,6 +11,7 @@ import Link from "next/link";
 const Home = async () => {
   const Questions = await Actions.getAllQuestion();
 
+  console.log("questions", Questions);
   const Filter = [
     {
       id: 1,
@@ -44,11 +45,13 @@ const Home = async () => {
           return <Tag size="big" key={item.id} label={item.title} />;
         })}
       </div>
-      <Link href={"/answers"}>
-        <QuestionCard title="How to refresh all the data inside the Datatable and move the data into original place after closing the modal popup close button" />
-      </Link>
+
       {Questions?.map((item) => {
-        return <QuestionCard key={item.title} title={item.title} />;
+        return (
+          <Link href={`/question/${item._id}`}>
+            <QuestionCard key={item.title} title={item.title} />
+          </Link>
+        );
       })}
     </div>
   );

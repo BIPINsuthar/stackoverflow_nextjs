@@ -31,12 +31,10 @@ const questionSchema = new Schema({
     type: Number,
     default: 0,
   },
-  auther: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  auther: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   upvotes: [
     {
       type: Schema.Types.ObjectId,
@@ -57,7 +55,7 @@ const questionSchema = new Schema({
   ],
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

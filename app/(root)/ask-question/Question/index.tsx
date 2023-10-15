@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { Input } from "@/components/molecules/Input";
@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import * as Actions from "../../../../lib/actions";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "@/context";
 
 interface AskQustionProps {
   questionTitle: string;
@@ -20,6 +21,8 @@ interface AskQustionProps {
 export const Question = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathName = usePathname();
+
+  const { mode } = useTheme();
 
   const formik = useFormik<AskQustionProps>({
     initialValues: {
@@ -129,6 +132,8 @@ export const Question = ({ userId }: { userId: string }) => {
               "codesample | bold italic forecolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | ",
             content_style: "body { font-family:Inter; font-size:16px }",
+            skin: mode == "dark" ? "oxide-dark" : "oxide",
+            content_css: mode == "dark" ? "dark" : "light",
           }}
         />
         {formik.errors.problemExplanation ? (
