@@ -37,8 +37,8 @@ const Question = async ({ params }) => {
     <div className="flex w-full flex-1 flex-col gap-6">
       <div className="flex-between max-sm:max-md-col">
         <UserInfo
-          name={question.auther.name}
-          picture={question.auther.picture}
+          name={question.author.name}
+          picture={question.author.picture}
         />
         <div className="flex items-center gap-2 ">
           <Voting type="upVote" count="12" isFilled />

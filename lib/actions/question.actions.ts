@@ -16,7 +16,7 @@ export async function getAllQuestion() {
         model: Models.Tag,
       })
       .populate({
-        path: "auther",
+        path: "author",
         model: Models.User,
       })
       .sort({ createdAt: -1 });
@@ -31,17 +31,17 @@ export async function createQuestion(params: {
   title: string;
   content: string;
   tags: string[];
-  auther: string;
+  author: string;
   path: string;
 }) {
   try {
     connectToDatabase();
-    const { title, content, tags, auther, path } = params;
+    const { title, content, tags, author, path } = params;
 
     const question = await Models.Question.create({
       title,
       content,
-      auther,
+      author,
     });
 
     const tagDocuments = [];
@@ -82,7 +82,7 @@ export async function getQuestionById(questionId: string) {
         select: "_id name",
       })
       .populate({
-        path: "auther",
+        path: "author",
         model: Models.User,
         select: "_id clerkId name picture",
       })) as Question;

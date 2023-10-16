@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useRef } from "react";
 import { Button } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { Input } from "@/components/molecules/Input";
@@ -21,7 +21,7 @@ interface AskQustionProps {
 export const Question = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathName = usePathname();
-
+  const editorRef = useRef(null);
   const { mode } = useTheme();
 
   const formik = useFormik<AskQustionProps>({
@@ -43,7 +43,7 @@ export const Question = ({ userId }: { userId: string }) => {
         await Actions.createQuestion({
           title: values.questionTitle,
           content: values.problemExplanation,
-          auther: userId,
+          author: userId,
           tags: values.tags,
           path: pathName!,
         });
@@ -67,9 +67,13 @@ export const Question = ({ userId }: { userId: string }) => {
           });
         } else {
           formik.setErrors({});
-          if (!formik.values.tags.includes(tagValue)) {
+          if (
+            !formik.values.tags.includes(tagValue) &&
+            formik.values.tags.length < 5
+          ) {
             const totalTags = [...formik.values.tags, tagValue];
             formik.setFieldValue("tags", totalTags, false);
+            tagInput.value = "";
           }
         }
       }
@@ -82,7 +86,7 @@ export const Question = ({ userId }: { userId: string }) => {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Input
         value={formik.values.questionTitle}
         onChange={(e) =>
@@ -100,13 +104,18 @@ export const Question = ({ userId }: { userId: string }) => {
         <Editor
           value={formik.values.problemExplanation}
           apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
-          initialValue=""
+          initialValue={formik.values.problemExplanation}
+          onBlur={formik.handleBlur}
           onChange={(value) => {
             formik.setFieldValue("problemExplanation", value, false);
           }}
           onEditorChange={(content) =>
             formik.setFieldValue("problemExplanation", content, false)
           }
+          onInit={(evt, editor) => {
+            // @ts-ignore
+            editorRef.current = editor;
+          }}
           init={{
             height: 350,
             menubar: false,
@@ -171,6 +180,6 @@ export const Question = ({ userId }: { userId: string }) => {
         type="gradient"
         width="fit"
       />
-    </>
+    </div>
   );
 };

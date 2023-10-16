@@ -1,9 +1,10 @@
 import { Tag } from "@/components/molecules/Badges";
+import { Props } from "./types";
 
-export const TagCard = () => {
+export const TagCard = ({ name }: Props) => {
   return (
     <div className="light-border flex flex-col max-w-[250px] max-sm:max-w-full border rounded-lg gap-4 p-4">
-      <Tag label="JAVASCRIPT" />
+      <Tag label={name} />
       <p className="small-regular text-dark500_light700">
         JavaScript, often abbreviated as JS, is a programming language that is
         one of the core technologies of the World Wide Web, alongside HTML and

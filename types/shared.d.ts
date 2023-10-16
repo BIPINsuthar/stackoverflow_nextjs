@@ -31,7 +31,7 @@ export type Question = {
   views: number;
   upvotes: User[];
   downvotes: User[];
-  auther: User;
-  // answers: Schema.Types.ObjectId[];
+  author: User;
+  answers: Schema.Types.ObjectId[];
   createdAt: Date;
 };

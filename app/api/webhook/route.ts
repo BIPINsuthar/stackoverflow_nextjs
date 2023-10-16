@@ -73,21 +73,19 @@ export async function POST(req: Request) {
   }
 
   if (eventType === "user.updated") {
-    const { id, email_addresses, image_url, username, first_name, last_name } =
-      evt.data;
-
-    const mongoUser = await Actions.updateUser({
-      clearkId: id,
-      path: `profile/${id}`,
-      updateData: {
-        email: email_addresses[0].email_address,
-        name: `${first_name} ${last_name}`,
-        picture: image_url,
-        username: username ?? "",
-      },
-    });
-
-    return NextResponse.json({ message: "OK", user: mongoUser });
+    // const { id, email_addresses, image_url, username, first_name, last_name } =
+    //   evt.data;
+    // const mongoUser = await Actions.updateUser({
+    //   clearkId: id,
+    //   path: `profile/${id}`,
+    //   updateData: {
+    //     email: email_addresses[0].email_address,
+    //     name: `${first_name} ${last_name}`,
+    //     picture: image_url,
+    //     username: username ?? "",
+    //   },
+    // });
+    // return NextResponse.json({ message: "OK", user: mongoUser });
   }
 
   if (eventType == "user.deleted") {

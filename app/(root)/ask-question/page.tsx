@@ -15,7 +15,7 @@ const AskQuestions = async () => {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <h1 className="h1-bold text-dark100_light900">Edit a question</h1>
+      <h1 className="h1-bold text-dark100_light900">Ask a question</h1>
       <Question userId={user._id} />
     </div>
   );

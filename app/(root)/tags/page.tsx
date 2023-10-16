@@ -11,7 +11,7 @@ const Tags = async () => {
       <h1 className="h1-bold text-dark100_light900">Tags</h1>
       <div className="flex items-center gap-2 flex-wrap">
         {tags.map((item) => {
-          return <TagCard key={item} />;
+          return <TagCard key={item} name={item.name} />;
         })}
       </div>
     </section>
