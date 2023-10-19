@@ -12,7 +12,7 @@ export const Icons = ({
   return (
     <Image
       onClick={onClick}
-      className={`${!uri && "invert-colors"} ${className}`}
+      className={`${className}`}
       color={color}
       width={size ?? 20}
       height={size ?? 20}

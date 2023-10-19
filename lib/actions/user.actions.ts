@@ -1,7 +1,9 @@
+"use server";
 import { connectToDatabase } from "../mongoose";
 
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
+import { User } from "@/types/shared";
 
 // export async function deleteUser(clearkId: string) {
 //   try {
@@ -25,7 +27,6 @@ import { revalidatePath } from "next/cache";
 //     //todo:delete answare as well here using userQuestionId
 //     return deleteUser;
 //   } catch (error) {
-//     console.log(error);
 //     throw error;
 //   }
 // }
@@ -37,13 +38,11 @@ export async function getUserById(userId: string) {
     const user = await Models.User.findOne({
       clerkId: userId,
     });
-    console.log("user", user);
 
     if (!user) throw new Error("User not found!");
 
-    return user;
+    return user as User;
   } catch (error) {
-    console.log("getUserByid", error);
     throw error;
   }
 }
@@ -55,7 +54,6 @@ export async function createUser(userData: Partial<Models.IUser>) {
     const newUser = await Models.User.create(userData);
     return newUser;
   } catch (error) {
-    console.log("create user error", error);
     throw error;
   }
 }
@@ -83,7 +81,6 @@ export async function updateUser(params: UpdateUserParams) {
     );
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
@@ -98,7 +95,6 @@ export async function getAllUsers() {
 
     return allUsers;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }

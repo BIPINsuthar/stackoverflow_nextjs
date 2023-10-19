@@ -1,3 +1,4 @@
+"use server";
 import * as Models from ".././model";
 import { connectToDatabase } from "../mongoose";
 

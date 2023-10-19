@@ -1,8 +1,8 @@
 "use server";
-
 import { connectToDatabase } from "../mongoose";
 
 import * as Models from "../model";
+
 import { revalidatePath } from "next/cache";
 import { Question } from "@/types/shared";
 
@@ -90,6 +90,92 @@ export async function getQuestionById(questionId: string) {
     return question;
   } catch (error) {
     console.log("error while getQuestionByid", error);
+    throw error;
+  }
+}
+
+export async function upvoteQuestions(params: {
+  questionId: string;
+  userId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}) {
+  try {
+    connectToDatabase();
+    const { hasdownVoted, hasupVoted, questionId, userId, path } = params;
+
+    let updateQuery = {};
+    if (hasupVoted) {
+      //if already upvoted then remove
+      updateQuery = { $pull: { upvotes: userId } };
+    } else if (hasdownVoted) {
+      //if downVoted then remove from the downvotes list and add to upvotes list
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
+    } else {
+      //if yet not voted then add to upvotes list
+      updateQuery = { $addToSet: { upvotes: userId } };
+    }
+
+    const question = await Models.Question.findByIdAndUpdate(
+      questionId,
+      updateQuery,
+      {
+        new: true,
+      }
+    );
+
+    if (!question) throw new Error("Question not found!");
+
+    //increment auther reputation
+    revalidatePath(path);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function downvoteQuestions(params: {
+  questionId: string;
+  userId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}) {
+  try {
+    connectToDatabase();
+    const { hasdownVoted, hasupVoted, questionId, userId, path } = params;
+
+    let updateQuery = {};
+    if (hasdownVoted) {
+      //if already downvoted then remove
+      updateQuery = { $pull: { downvotes: userId } };
+    } else if (hasupVoted) {
+      //if downVoted then remove from the downvotes list and add to upvotes list
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      };
+    } else {
+      //if yet not voted then add to upvotes list
+      updateQuery = { $addToSet: { downvotes: userId } };
+    }
+
+    const question = await Models.Question.findByIdAndUpdate(
+      questionId,
+      updateQuery,
+      {
+        new: true,
+      }
+    );
+
+    if (!question) throw new Error("Question not found!");
+
+    //increment auther reputation
+    revalidatePath(path);
+  } catch (error) {
     throw error;
   }
 }

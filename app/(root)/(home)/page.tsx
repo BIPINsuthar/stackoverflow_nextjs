@@ -11,7 +11,6 @@ import Link from "next/link";
 const Home = async () => {
   const Questions = await Actions.getAllQuestion();
 
-  console.log("questions", Questions);
   const Filter = [
     {
       id: 1,
@@ -49,7 +48,14 @@ const Home = async () => {
       {Questions?.map((item) => {
         return (
           <Link href={`/question/${item._id}`}>
-            <QuestionCard key={item.title} title={item.title} />
+            <QuestionCard
+              key={item.title}
+              title={item.title}
+              user={{
+                name: item.author.name,
+                picture: item.author.picture,
+              }}
+            />
           </Link>
         );
       })}

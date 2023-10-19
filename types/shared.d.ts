@@ -29,9 +29,26 @@ export type Question = {
   content: string;
   tags: Tag[];
   views: number;
-  upvotes: User[];
-  downvotes: User[];
+  upvotes: Schema.Types.ObjectId[];
+  downvotes: Schema.Types.ObjectId[];
   author: User;
   answers: Schema.Types.ObjectId[];
   createdAt: Date;
 };
+
+export type Answer = {
+  _id: string;
+  content: string;
+  question: Question;
+  author: User;
+  upvotes: Schema.Types.ObjectId[];
+  downvotes: Schema.Types.ObjectId[];
+  createdAt: Date;
+};
+
+export interface CreateAnswerParams {
+  clerkId: string;
+  questionId: string;
+  content: string;
+  path: string;
+}

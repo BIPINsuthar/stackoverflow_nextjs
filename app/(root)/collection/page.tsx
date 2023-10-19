@@ -1,4 +1,3 @@
-import { QuestionCard } from "@/components/organisms";
 import { EmptyQuestions } from "./components/EmptyQuestions";
 
 export default function Collections() {

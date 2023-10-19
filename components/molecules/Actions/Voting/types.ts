@@ -1,5 +1,10 @@
 export interface Props {
-  type?: "upVote" | "downVote";
-  count: string;
+  type?: "answer" | "question";
+  count: number;
   isFilled?: boolean;
+  userId: string;
+  itemId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  actionType?: "upVote" | "downVote";
 }

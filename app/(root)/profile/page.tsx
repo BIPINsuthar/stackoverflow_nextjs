@@ -1,7 +1,6 @@
 "use client";
 import { AchivementCard, Button } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
-import { QuestionCard } from "@/components/organisms";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 

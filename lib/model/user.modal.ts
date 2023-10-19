@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import { Schema, models, model, Document } from "mongoose";
 
 export interface IUser extends Document {
   clerkId: string;
@@ -11,11 +11,11 @@ export interface IUser extends Document {
   location?: string;
   portfolioWebsite?: string;
   reputation?: number;
-  savedQuestions: Schema.Types.ObjectId[];
+  saved: Schema.Types.ObjectId[];
   joinedAt: Date;
 }
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   clerkId: { type: String, required: true },
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
@@ -30,4 +30,4 @@ const userSchema = new Schema({
   joinedAt: { type: Date, default: Date.now },
 });
 
-export const User = models?.User || model("User", userSchema);
+export const User = models.User || model("User", UserSchema);

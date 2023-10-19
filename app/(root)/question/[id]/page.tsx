@@ -7,31 +7,17 @@ import { Icons } from "@/components/atoms";
 import { UserInfo } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { ParseHtml } from "@/components/shared";
-
-// const Answers = () => {
-//   const Filter = [
-//     {
-//       title: "Newest",
-//     },
-//     {
-//       title: "Recommended Questions",
-//     },
-//     {
-//       title: "Frequent",
-//     },
-//     {
-//       title: "Unanswered",
-//     },
-//   ];
-
-//   return (
-
-//   );
-// };
+import { Answer } from "@/components/forms/Answer";
+import { auth } from "@clerk/nextjs";
 
 const Question = async ({ params }) => {
+  const { userId: clerkId } = auth();
+
   const question = await Actions.getQuestionById(params?.id);
-  console.log("question details", params.id, question);
+  const answerList = await Actions.getAllAnswer(question._id);
+  console.log("question details", question);
+
+  const user = await Actions.getUserById(clerkId!);
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6">
@@ -41,9 +27,27 @@ const Question = async ({ params }) => {
           picture={question.author.picture}
         />
         <div className="flex items-center gap-2 ">
-          <Voting type="upVote" count="12" isFilled />
-          <Voting type="downVote" count="12" isFilled />
-          <Icons type="star-red" size={18} />
+          <Voting
+            itemId={question._id}
+            hasdownVoted={question.downvotes.includes(user._id)}
+            hasupVoted={question.upvotes.includes(user._id)}
+            userId={user._id}
+            actionType="upVote"
+            count={question.upvotes.length}
+            isFilled
+          />
+          <Voting
+            itemId={question._id}
+            hasdownVoted={question.downvotes.includes(user._id)}
+            hasupVoted={question.upvotes.includes(user._id)}
+            userId={user._id}
+            actionType="downVote"
+            count={question.downvotes.length}
+            isFilled
+          />
+          <div className="cursor-pointer">
+            <Icons type="star-red" size={18} />
+          </div>
         </div>
       </div>
       <h2 className="h2-semibold text-dark200_light900">{question.title}</h2>
@@ -54,21 +58,47 @@ const Question = async ({ params }) => {
         <FeedbackCenter type="Votes" count="5.2k" />
       </div>
       <ParseHtml data={question.content} />
-      {/* <p className="body-regular text-dark400_light700">
-        When the user clicks a button for the first time, a spinner is
-        displayed, the "close" button is disabled, and a modal popup is shown.
-        When the user clicks on a table displayed within the modal popup, the
-        table loads data. When the user closes the popup by clicking the "close"
-        button, and then clicks the same button again without refreshing the
-        page, the data in the table should be the same as it was before. I need
-        it so that when the user clicks the button, any changes made stay in
-        place even after closing and reopening the popup.
-      </p> */}
       <div className="flex gap-2 flex-wrap">
         {question.tags.map((item) => {
           return <Tag label={item.name} key={item._id} />;
         })}
       </div>
+      <div>
+        {answerList.map((item) => {
+          return (
+            <div>
+              <div className="flex-between max-sm:max-md-col">
+                <UserInfo
+                  name={item.author.name}
+                  picture={item.author.picture}
+                />
+                <div className="flex items-center gap-2 ">
+                  <Voting
+                    itemId={item._id}
+                    hasdownVoted={item.downvotes.includes(user._id)}
+                    hasupVoted={item.upvotes.includes(user._id)}
+                    userId={user._id}
+                    actionType="upVote"
+                    count={item.upvotes.length}
+                    type="answer"
+                  />
+                  <Voting
+                    itemId={item._id}
+                    hasdownVoted={item.downvotes?.includes(user._id)}
+                    hasupVoted={item.upvotes?.includes(user._id)}
+                    userId={user._id}
+                    actionType="downVote"
+                    count={item.downvotes.length}
+                    type="answer"
+                  />
+                </div>
+              </div>
+              <ParseHtml data={item.content} />
+            </div>
+          );
+        })}
+      </div>
+      <Answer questionId={question._id} />
     </div>
   );
 };
