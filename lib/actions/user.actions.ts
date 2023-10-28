@@ -4,6 +4,7 @@ import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
 import { User } from "@/types/shared";
+import error from "next/error";
 
 // export async function deleteUser(clearkId: string) {
 //   try {
@@ -47,10 +48,41 @@ export async function getUserById(userId: string) {
   }
 }
 
-export async function createUser(userData: Partial<Models.IUser>) {
+export async function saveQuetion(
+  questionId: string,
+  userId: string,
+  path: string
+) {
+  console.log("quesitnid", questionId, userId, path);
   try {
     connectToDatabase();
 
+    let updateQuery = {};
+    const hasSaved = await Models.User.findOne({
+      savedQuestions: { $in: questionId },
+    });
+
+    console.log("what is details", hasSaved);
+    if (hasSaved) {
+      updateQuery = { $pull: { savedQuestions: questionId } };
+    } else {
+      updateQuery = { $addToSet: { savedQuestions: questionId } };
+    }
+    const updatedUser = await Models.User.findOneAndUpdate(
+      { clerkId: userId },
+      updateQuery,
+      { new: true }
+    );
+    revalidatePath(path);
+    console.log("what is details", updatedUser);
+  } catch (error) {
+    throw error;
+  }
+}
+export async function createUser(userData: Partial<Models.IUser>) {
+  try {
+    connectToDatabase();
+    console.log("create user called", userData);
     const newUser = await Models.User.create(userData);
     return newUser;
   } catch (error) {
@@ -59,7 +91,7 @@ export async function createUser(userData: Partial<Models.IUser>) {
 }
 
 interface UpdateUserParams {
-  clearkId: string;
+  clerkId: string;
   updateData: Partial<Models.IUser>;
   path: string;
 }
@@ -68,17 +100,12 @@ export async function updateUser(params: UpdateUserParams) {
   try {
     connectToDatabase();
 
-    const { clearkId, path, updateData } = params;
+    const { clerkId, path, updateData } = params;
 
-    await Models.User.findOneAndUpdate(
-      {
-        clearkId: clearkId,
-      },
-      updateData,
-      {
-        new: true,
-      }
-    );
+    await Models.User.findOneAndUpdate({ clerkId }, updateData, {
+      new: true,
+    });
+
     revalidatePath(path);
   } catch (error) {
     throw error;

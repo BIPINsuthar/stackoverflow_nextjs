@@ -9,13 +9,13 @@ import { Tag } from "@/components/molecules/Badges";
 import { ParseHtml } from "@/components/shared";
 import { Answer } from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
+import { SavedQuestion } from "../Components/savedQuestion";
 
 const Question = async ({ params }) => {
   const { userId: clerkId } = auth();
 
   const question = await Actions.getQuestionById(params?.id);
   const answerList = await Actions.getAllAnswer(question._id);
-  console.log("question details", question);
 
   const user = await Actions.getUserById(clerkId!);
 
@@ -34,7 +34,6 @@ const Question = async ({ params }) => {
             userId={user._id}
             actionType="upVote"
             count={question.upvotes.length}
-            isFilled
           />
           <Voting
             itemId={question._id}
@@ -43,11 +42,12 @@ const Question = async ({ params }) => {
             userId={user._id}
             actionType="downVote"
             count={question.downvotes.length}
-            isFilled
           />
-          <div className="cursor-pointer">
-            <Icons type="star-red" size={18} />
-          </div>
+          <SavedQuestion
+            questionId={question._id}
+            hasSaved={user.savedQuestions?.includes(question._id)}
+            userId={user._id}
+          />
         </div>
       </div>
       <h2 className="h2-semibold text-dark200_light900">{question.title}</h2>

@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 export const Voting = ({
   count,
   type,
-  isFilled,
   userId,
   itemId,
   hasupVoted,
@@ -17,13 +16,14 @@ export const Voting = ({
 }: Props) => {
   const path = usePathname();
 
-  const icon = isFilled
-    ? actionType == "downVote"
-      ? "filled-down-votes"
-      : "filled-up-votes"
-    : actionType === "downVote"
-    ? "downvote"
-    : "upvote";
+  const icon =
+    actionType === "downVote"
+      ? hasdownVoted
+        ? "filled-down-votes"
+        : "downvote"
+      : hasupVoted
+      ? "filled-up-votes"
+      : "upvote";
 
   const handleVotes = async () => {
     if (type == "answer") {

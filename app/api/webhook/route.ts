@@ -58,13 +58,14 @@ export async function POST(req: Request) {
   console.log("Webhook event Type:", eventType);
 
   if (eventType === "user.created") {
+    console.log("Webhook event Type:", eventType);
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
 
     const mongoUser = await Actions.createUser({
       clerkId: id,
       email: email_addresses[0].email_address,
-      name: `${first_name} ${last_name ?? " "}`,
+      name: `${first_name} ${last_name != null ? last_name : " "}`,
       picture: image_url,
       username: username ?? "",
     });
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
     // const { id, email_addresses, image_url, username, first_name, last_name } =
     //   evt.data;
     // const mongoUser = await Actions.updateUser({
-    //   clearkId: id,
+    //   clerkId: id,
     //   path: `profile/${id}`,
     //   updateData: {
     //     email: email_addresses[0].email_address,

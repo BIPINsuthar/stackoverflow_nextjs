@@ -19,7 +19,7 @@ export type User = {
   location?: string;
   portfolioWebsite?: string;
   reputation?: number;
-  savedQuestions: Question[];
+  savedQuestions: Schema.Types.ObjectId[];
   joinedAt: Date;
 };
 

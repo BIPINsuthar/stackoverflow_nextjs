@@ -13,7 +13,7 @@ export const connectToDatabase = async () => {
 
   try {
     await mongoose.connect(process.env.MONGODB_URL, {
-      dbName: "nextjs_devOverflow",
+      dbName: "nextjs_devOverflow_bipin",
     });
     isConnected = true;
     console.log("MongoDb is connected");
