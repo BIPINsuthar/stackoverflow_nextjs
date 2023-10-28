@@ -4,8 +4,9 @@ import { Icons } from "@/components/atoms";
 
 import * as Actions from "../../../../../lib/actions";
 import { usePathname } from "next/navigation";
+import { Props } from "./types";
 
-export const SavedQuestion = ({ questionId, userId, hasSaved }) => {
+export const SavedQuestion = ({ questionId, userId, hasSaved }: Props) => {
   const path = usePathname();
 
   return (

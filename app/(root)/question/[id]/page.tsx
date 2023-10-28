@@ -3,7 +3,6 @@ import React from "react";
 import * as Actions from "../../../../lib/actions";
 
 import { FeedbackCenter, Time, Voting } from "@/components/molecules/Actions";
-import { Icons } from "@/components/atoms";
 import { UserInfo } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { ParseHtml } from "@/components/shared";
@@ -11,6 +10,7 @@ import { Answer } from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
 import { SavedQuestion } from "../Components/savedQuestion";
 
+// @ts-ignore
 const Question = async ({ params }) => {
   const { userId: clerkId } = auth();
 
