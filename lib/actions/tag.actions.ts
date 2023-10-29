@@ -58,7 +58,6 @@ export async function getQuestionByTagId(tagId: string) {
       ],
     });
     if (!tagDetails) throw new Error("Tag not found!");
-    console.log("tag detgails", tagDetails);
     return tagDetails as Tag;
   } catch (error) {
     throw error;

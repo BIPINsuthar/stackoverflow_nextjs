@@ -3,6 +3,7 @@ import React from "react";
 import * as Actions from "../../../../lib/actions";
 import { QuestionCard } from "@/components/organisms";
 
+// @ts-ignore
 const TagQuestions = async ({ params }) => {
   const tagDetail = await Actions.getQuestionByTagId(params.id);
 

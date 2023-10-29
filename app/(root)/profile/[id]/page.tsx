@@ -1,34 +1,30 @@
-"use client";
 import { AchivementCard, Button } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function Profile() {
-  const route = useRouter();
+import * as Actions from "../../../../lib/actions";
+import { Icons } from "@/components/atoms";
+
+// @ts-ignore
+const Profile = async ({ params }) => {
+  const user = await Actions.getUserById(params.id);
 
   return (
     <section className="flex flex-1 flex-col gap-6">
       {/* header section */}
-      <div className="flex items-start max-md-col">
-        <Image
-          width={140}
-          height={140}
-          src={"/assets/icons/avatar.svg"}
-          alt="Avtar"
-          className="invert-colors"
-        />
+      <div className="flex items-start max-md-col gap-4">
+        <Icons uri={user.picture} size={140} className="rounded-full" />
         <div className="flex flex-col gap-4">
           <div className="flex-between max-md-col">
-            <h1 className="h1-bold text-dark100_light900">Faizan JSM</h1>
-            <Button
-              onClick={() => route.push("/edit-profile")}
-              title="Edit Profile"
-              type="light"
-              width="fit"
-            />
+            <h1 className="h1-bold text-dark100_light900">{user.name}</h1>
+            <Link href={"/edit-profile"}>
+              <Button title="Edit Profile" type="light" width="fit" />
+            </Link>
           </div>
-          <p className="paragraph-regular text-dark200_light900">@faizan</p>
+          <p className="paragraph-regular text-dark200_light900">
+            @{user.username}
+          </p>
           <div className="flex items-center gap-2">
             <Image
               width={20}
@@ -37,15 +33,12 @@ export default function Profile() {
               alt="Avtar"
               className="invert-colors"
             />
+
             <p className="paragraph-medium text-dark400_light700">
-              Mumbai, India
+              {user.location ?? "---"}
             </p>
           </div>
-          <p className="paragraph-regular text-dark400_light800">
-            Launch your development career with project-based coaching -
-            showcase your skills with practical development experience and land
-            the coding career of your dreams. Check out jsmastery.pro
-          </p>
+          <p className="paragraph-regular text-dark400_light800">{user.bio}</p>
         </div>
       </div>
       <p className="paragram-medium text-dark200_light800">Stars</p>
@@ -71,4 +64,6 @@ export default function Profile() {
       </div>
     </section>
   );
-}
+};
+
+export default Profile;

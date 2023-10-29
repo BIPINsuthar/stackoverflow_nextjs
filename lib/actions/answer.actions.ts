@@ -8,7 +8,6 @@ import { getUserById } from ".";
 export async function getAllAnswer(questionId: string) {
   try {
     connectToDatabase();
-    console.log("question id", questionId);
     const answerList = await Models.Answer.find({
       questionId: questionId,
     })

@@ -1,35 +1,34 @@
 "use server";
 import { connectToDatabase } from "../mongoose";
-import { FilterQuery } from "mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
 import { User, Question } from "@/types/shared";
 
-// export async function deleteUser(clearkId: string) {
-//   try {
-//     connectToDatabase();
+export async function deleteUser(clearkId: string) {
+  try {
+    connectToDatabase();
 
-//     const user = await Models.User.findOneAndDelete({
-//       clearkId: clearkId,
-//     });
-//     if (!user) {
-//       throw new Error("User not found!");
-//     }
-//     const userQuestionsIds = await Models.Question.find({
-//       auther: user._id,
-//     }).distinct("_id");
+    const user = await Models.User.findOneAndDelete({
+      clearkId: clearkId,
+    });
+    if (!user) {
+      throw new Error("User not found!");
+    }
+    const userQuestionsIds = await Models.Question.find({
+      auther: user._id,
+    }).distinct("_id");
 
-//     //delete user questions
-//     await Models.Question.deleteMany({ auther: user._id });
+    //delete user questions
+    await Models.Question.deleteMany({ auther: user._id });
 
-//     const deleteUser = await Models.User.findByIdAndDelete(user._id);
+    const deleteUser = await Models.User.findByIdAndDelete(user._id);
 
-//     //todo:delete answare as well here using userQuestionId
-//     return deleteUser;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+    //todo:delete answare as well here using userQuestionId
+    return deleteUser;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function getUserById(userId: string) {
   try {
@@ -80,7 +79,6 @@ export async function saveQuetion(
 export async function createUser(userData: Partial<Models.IUser>) {
   try {
     connectToDatabase();
-    console.log("create user called", userData);
     const newUser = await Models.User.create(userData);
     return newUser;
   } catch (error) {
