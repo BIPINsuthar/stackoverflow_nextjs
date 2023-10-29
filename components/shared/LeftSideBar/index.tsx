@@ -8,7 +8,7 @@ export const LeftSideBar = () => {
   const pathName = usePathname();
 
   return (
-    <section className="flex pt-10 flex-col light-border sticky left-0 top-0 h-screen overflow-y-auto background-light900_dark200 border-r p-4 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px] custom-scrollbar">
+    <section className="flex pt-10 flex-col light-border sticky left-0 top-0 h-screen  background-light900_dark200 border-r p-4 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px] custom-scrollbar">
       {Constants.sidebarLinks.map((item) => {
         const isActive = pathName == item.route;
 

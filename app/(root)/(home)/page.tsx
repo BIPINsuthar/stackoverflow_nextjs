@@ -55,6 +55,13 @@ const Home = async () => {
                 name: item.author.name,
                 picture: item.author.picture,
               }}
+              createdAt={item.createdAt}
+              feedBack={{
+                answers: item.answers.length,
+                view: 2,
+                votes: item.upvotes.length,
+              }}
+              tags={item.tags}
             />
           </Link>
         );

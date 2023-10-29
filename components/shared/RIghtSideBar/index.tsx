@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const RightSideBar = () => {
   return (
-    <section className="flex pt-10 flex-col gap-10 light-border sticky right-0 top-0 h-screen overflow-y-auto background-light900_dark200 border-l p-4 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[330px] max-xl:hidden custom-scrollbar">
+    <section className="flex pt-10 flex-col gap-10 light-border sticky right-0 top-0 h-screen background-light900_dark200 border-l p-4 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[330px] max-xl:hidden custom-scrollbar">
       <div className="flex flex-col gap-6">
         <h3 className="text-dark200_light900 h3-bold font-inter">
           Hot Network

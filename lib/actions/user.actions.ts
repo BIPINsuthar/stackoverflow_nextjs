@@ -1,10 +1,9 @@
 "use server";
 import { connectToDatabase } from "../mongoose";
-
+import { FilterQuery } from "mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
-import { User } from "@/types/shared";
-import error from "next/error";
+import { User, Question } from "@/types/shared";
 
 // export async function deleteUser(clearkId: string) {
 //   try {
@@ -53,32 +52,31 @@ export async function saveQuetion(
   userId: string,
   path: string
 ) {
-  console.log("quesitnid", questionId, userId, path);
   try {
     connectToDatabase();
 
-    let updateQuery = {};
-    const hasSaved = await Models.User.findOne({
-      savedQuestions: { $in: questionId },
-    });
+    const user = (await Models.User.findById(userId)) as User;
 
-    console.log("what is details", hasSaved);
-    if (hasSaved) {
+    if (!user) throw Error("User Not Found!");
+
+    const isQuestionSaved = user.savedQuestions.includes(questionId);
+
+    let updateQuery = {};
+
+    if (isQuestionSaved) {
       updateQuery = { $pull: { savedQuestions: questionId } };
     } else {
       updateQuery = { $addToSet: { savedQuestions: questionId } };
     }
-    const updatedUser = await Models.User.findOneAndUpdate(
-      { clerkId: userId },
-      updateQuery,
-      { new: true }
-    );
+
+    await Models.User.findByIdAndUpdate(userId, updateQuery, { new: true });
+
     revalidatePath(path);
-    console.log("what is details", updatedUser);
   } catch (error) {
     throw error;
   }
 }
+
 export async function createUser(userData: Partial<Models.IUser>) {
   try {
     connectToDatabase();
@@ -121,6 +119,50 @@ export async function getAllUsers() {
     });
 
     return allUsers;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function allSavedQuestions(params: {
+  userId: string;
+  searchQuery?: string;
+}) {
+  try {
+    connectToDatabase();
+
+    const { userId, searchQuery } = params;
+
+    const query = searchQuery
+      ? { title: { $regx: new RegExp(searchQuery, "i") } }
+      : {};
+
+    const allSavedQuestions = await Models.User.find(
+      {
+        clerkId: userId,
+      },
+      {
+        savedQuestions: 1,
+        _id: 0,
+      }
+    ).populate({
+      path: "savedQuestions",
+      model: Models.Question,
+      match: query,
+      options: {
+        sort: { createdAt: -1 },
+      },
+      populate: [
+        { path: "tags", model: Models.Tag, select: "_id name" },
+        {
+          path: "author",
+          model: Models.User,
+          select: "_id clerkId name picture",
+        },
+      ],
+    });
+
+    return allSavedQuestions[0].savedQuestions as Question[];
   } catch (error) {
     throw error;
   }

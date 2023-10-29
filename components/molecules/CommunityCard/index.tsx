@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { Tag } from "../Badges";
 import { Props } from "./types";
-import { auth } from "@clerk/nextjs";
-
-import * as Actions from "../../../lib/actions";
 
 export const CommunityCard = async ({
   name,
@@ -12,7 +9,7 @@ export const CommunityCard = async ({
   userId,
 }: Props) => {
   return (
-    <div className="flex border w-fit items-center light-border-2 h-full max-w-[260px] shadow-light100_dark100 flex-col gap-4 rounded-lg p-4">
+    <div className="flex border w-fit items-center light-border-2 h-fit max-w-[260px] shadow-light100_dark100 flex-col gap-4 rounded-lg p-4">
       <Image
         src={picture}
         width={100}

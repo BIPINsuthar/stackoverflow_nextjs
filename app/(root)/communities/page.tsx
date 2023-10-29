@@ -11,7 +11,7 @@ const Communities = async () => {
       <div>
         <SearchBar />
       </div>
-      <div>
+      <div className="flex items-center gap-2 flex-wrap">
         {users.map((item) => {
           return (
             <CommunityCard

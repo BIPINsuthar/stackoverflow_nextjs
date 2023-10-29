@@ -1,10 +1,16 @@
 import * as Molecules from "../../molecules";
-
 import { Props } from "./types";
 
 import { FeedbackCenter } from "@/components/molecules/Actions";
 
-export const QuestionCard = ({ onClick, title, tags, user }: Props) => {
+export const QuestionCard = ({
+  onClick,
+  title,
+  tags,
+  user,
+  feedBack,
+  createdAt,
+}: Props) => {
   return (
     <section
       onClick={onClick}
@@ -19,11 +25,16 @@ export const QuestionCard = ({ onClick, title, tags, user }: Props) => {
         })}
       </div>
       <div className="flex-between max-sm:max-md-col">
-        <Molecules.UserInfo name={user.name} picture={user.picture} />
+        <Molecules.UserInfo
+          type="Question"
+          name={user.name}
+          picture={user.picture}
+          date={createdAt}
+        />
         <div className="flex items-center gap-2 ">
-          <FeedbackCenter type="Views" count="1.2k" />
-          <FeedbackCenter type="Answers" count="900" />
-          <FeedbackCenter type="Votes" count="5.2k" />
+          <FeedbackCenter type="Views" count={feedBack?.view} />
+          <FeedbackCenter type="Answers" count={feedBack?.answers} />
+          <FeedbackCenter type="Votes" count={feedBack?.votes} />
         </div>
       </div>
     </section>

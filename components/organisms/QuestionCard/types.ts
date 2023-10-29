@@ -3,6 +3,12 @@ export interface Props {
   title: string;
   tags?: Tag[];
   user: User;
+  feedBack: {
+    view: number;
+    answers: number;
+    votes: number;
+  };
+  createdAt: Date;
 }
 
 export type User = {

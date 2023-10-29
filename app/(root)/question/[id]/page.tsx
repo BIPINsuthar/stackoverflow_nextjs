@@ -23,6 +23,8 @@ const Question = async ({ params }) => {
     <div className="flex w-full flex-1 flex-col gap-6">
       <div className="flex-between max-sm:max-md-col">
         <UserInfo
+          type="Question"
+          date={question.createdAt}
           name={question.author.name}
           picture={question.author.picture}
         />
@@ -52,10 +54,10 @@ const Question = async ({ params }) => {
       </div>
       <h2 className="h2-semibold text-dark200_light900">{question.title}</h2>
       <div className="flex items-center gap-4">
-        <Time />
-        <FeedbackCenter type="Views" count="1.2k" />
-        <FeedbackCenter type="Answers" count="900" />
-        <FeedbackCenter type="Votes" count="5.2k" />
+        <Time date={question.createdAt} />
+        <FeedbackCenter type="Views" count={0} />
+        <FeedbackCenter type="Answers" count={question.answers.length} />
+        <FeedbackCenter type="Votes" count={question.upvotes.length} />
       </div>
       <ParseHtml data={question.content} />
       <div className="flex gap-2 flex-wrap">
@@ -69,6 +71,7 @@ const Question = async ({ params }) => {
             <div>
               <div className="flex-between max-sm:max-md-col">
                 <UserInfo
+                  date={item.createdAt}
                   name={item.author.name}
                   picture={item.author.picture}
                 />

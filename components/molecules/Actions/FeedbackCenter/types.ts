@@ -1,4 +1,4 @@
 export interface Props {
-  count: string;
+  count: number;
   type: "Views" | "Answers" | "Votes";
 }
