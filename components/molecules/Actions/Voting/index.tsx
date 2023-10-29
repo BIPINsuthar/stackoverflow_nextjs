@@ -3,7 +3,8 @@ import { Icons } from "@/components/atoms";
 import { Props } from "./types";
 
 import * as Actions from "../../../../lib/actions";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const Voting = ({
   count,
@@ -15,6 +16,14 @@ export const Voting = ({
   actionType,
 }: Props) => {
   const path = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    Actions.viewQuestion({
+      userId: userId ? userId : undefined,
+      questionId: itemId,
+    });
+  }, [userId, itemId, path, router]);
 
   const icon =
     actionType === "downVote"

@@ -58,7 +58,7 @@ const Home = async () => {
               createdAt={item.createdAt}
               feedBack={{
                 answers: item.answers.length,
-                view: 2,
+                view: item.views,
                 votes: item.upvotes.length,
               }}
               tags={item.tags}

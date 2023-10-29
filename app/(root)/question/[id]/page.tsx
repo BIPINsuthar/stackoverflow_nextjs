@@ -55,7 +55,7 @@ const Question = async ({ params }) => {
       <h2 className="h2-semibold text-dark200_light900">{question.title}</h2>
       <div className="flex items-center gap-4">
         <Time date={question.createdAt} />
-        <FeedbackCenter type="Views" count={0} />
+        <FeedbackCenter type="Views" count={question.views} />
         <FeedbackCenter type="Answers" count={question.answers.length} />
         <FeedbackCenter type="Votes" count={question.upvotes.length} />
       </div>

@@ -55,7 +55,7 @@ export async function createQuestion(params: {
         {
           $setOnInsert: { name: tag },
           $push: {
-            question: question._id,
+            questions: question._id,
           },
         },
         { upsert: true, new: true }

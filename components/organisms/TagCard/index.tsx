@@ -1,7 +1,7 @@
 import { Tag } from "@/components/molecules/Badges";
 import { Props } from "./types";
 
-export const TagCard = ({ name }: Props) => {
+export const TagCard = ({ name, totalQuestions }: Props) => {
   return (
     <div className="light-border flex flex-col max-w-[250px] max-sm:max-w-full border rounded-lg gap-4 p-4">
       <Tag label={name} />
@@ -11,7 +11,7 @@ export const TagCard = ({ name }: Props) => {
         CSS
       </p>
       <div className="flex items-center gap-4">
-        <p className="body-semibold text-dark400_light500">23493+</p>
+        <p className="body-semibold text-dark400_light500">{totalQuestions}+</p>
         <p className="small-medium text-dark400_light500">Questions</p>
       </div>
     </div>

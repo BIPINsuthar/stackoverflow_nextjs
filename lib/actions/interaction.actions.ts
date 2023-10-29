@@ -3,17 +3,13 @@ import { connectToDatabase } from "../mongoose";
 import * as Models from ".././model";
 
 export async function viewQuestion(params: {
-  userId: string;
+  userId?: string;
   questionId: string;
 }) {
   try {
     await connectToDatabase();
 
     const { questionId, userId } = params;
-
-    await Models.Question.findByIdAndUpdate(questionId, {
-      $inc: { views: 1 },
-    });
 
     if (userId) {
       const existingInteraction = await Models.Interaction.findOne({
@@ -25,6 +21,9 @@ export async function viewQuestion(params: {
       if (existingInteraction) return console.log("User has already viewed.");
 
       //create interations
+      await Models.Question.findByIdAndUpdate(questionId, {
+        $inc: { views: 1 },
+      });
 
       await Models.Interaction.create({
         user: userId,

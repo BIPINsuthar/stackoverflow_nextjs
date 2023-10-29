@@ -20,7 +20,7 @@ export const Tag = ({ label, onDelete, size, isActive }: Props) => {
           onClick={onDelete}
           type="close"
           size={12}
-          className="cursor-pointer"
+          className="cursor-pointer invert-colors"
         />
       )}
     </section>

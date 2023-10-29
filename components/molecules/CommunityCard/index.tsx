@@ -15,7 +15,7 @@ export const CommunityCard = async ({
         width={100}
         height={100}
         alt="Avtar"
-        className="invert-colors rounded-full"
+        className="rounded-full"
       />
       <h3 className="h3-bold text-dark200_light900">{name}</h3>
       <p className="body-regular text-dark500_light500">@{userName}</p>
