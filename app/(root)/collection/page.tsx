@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { QuestionCard } from "@/components/organisms";
 import Link from "next/link";
 
-export const Collections = async () => {
+const Collections = async () => {
   const { userId } = auth();
   const allQuestions = await Actions.allSavedQuestions({
     userId: userId!,
