@@ -137,3 +137,35 @@ export async function downvoteAnswers(params: {
     throw error;
   }
 }
+
+export async function getUserAnswers(params: {
+  userId: string;
+  page: number;
+  pageSize: number;
+}) {
+  try {
+    const { userId, page = 1, pageSize = 10 } = params;
+    connectToDatabase();
+
+    const userAnswersList = await Models.Answer.find({
+      author: userId,
+    })
+      .sort({ upvotes: -1 })
+      .populate({
+        path: "questions",
+        model: Models.Question,
+        populate: [
+          { path: "tags", model: Models.Tag, select: "_id name" },
+          {
+            path: "author",
+            model: Models.User,
+            select: "_id clerkId name picture",
+          },
+        ],
+      });
+
+    return { answers: userAnswersList } as { answers: Answer[] };
+  } catch (error) {
+    throw error;
+  }
+}

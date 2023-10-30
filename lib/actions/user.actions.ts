@@ -46,6 +46,33 @@ export async function getUserById(userId: string) {
   }
 }
 
+export async function getUserInfo(userId: string) {
+  try {
+    connectToDatabase();
+
+    const user = await Models.User.findOne({
+      clerkId: userId,
+    });
+
+    if (!user) throw new Error("User not found!");
+
+    const totalQuestions = await Models.Question.countDocuments({
+      userId: user._id,
+    });
+    const totalAnswers = await Models.Answer.countDocuments({
+      userId: user._id,
+    });
+
+    return { user, totalQuestions, totalAnswers } as {
+      user: User;
+      totalQuestions: number;
+      totalAnswers: number;
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function saveQuetion(
   questionId: string,
   userId: string,

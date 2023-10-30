@@ -6,3 +6,4 @@ export * from "./AchivementCard";
 export * from "./CommunityCard";
 export * as Actions from "./Actions";
 export * from "./UserInfo";
+export * from "./ProfileLink";

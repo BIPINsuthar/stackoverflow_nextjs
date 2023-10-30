@@ -1,65 +1,71 @@
-import { AchivementCard, Button } from "@/components/molecules";
-import { Tag } from "@/components/molecules/Badges";
-import Image from "next/image";
+import { AchivementCard, Button, ProfileLink } from "@/components/molecules";
 import Link from "next/link";
 
 import * as Actions from "../../../../lib/actions";
 import { Icons } from "@/components/atoms";
+import moment from "moment";
 
 // @ts-ignore
 const Profile = async ({ params }) => {
-  const user = await Actions.getUserById(params.id);
-  const questions = await Actions.return(
-    <section className="flex flex-1 flex-col gap-6">
+  const userInfo = await Actions.getUserInfo(params.id);
+
+  const user = userInfo.user;
+
+  return (
+    <section className="flex flex-1 flex-col gap-8">
       {/* header section */}
       <div className="flex items-start max-md-col gap-4">
         <Icons uri={user.picture} size={140} className="rounded-full" />
-        <div className="flex flex-col gap-4">
-          <div className="flex-between max-md-col">
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex-between max-md-col w-full">
             <h1 className="h1-bold text-dark100_light900">{user.name}</h1>
-            <Link href={"/edit-profile"}>
+            <Link href={"/edit"}>
               <Button title="Edit Profile" type="light" width="fit" />
             </Link>
           </div>
           <p className="paragraph-regular text-dark200_light900">
             @{user.username}
           </p>
-          <div className="flex items-center gap-2">
-            <Image
-              width={20}
-              height={20}
-              src={"/assets/icons/avatar.svg"}
-              alt="Avtar"
-              className="invert-colors"
+          <div className="flex items-center gap-4">
+            {user.portfolioWebsite && (
+              <ProfileLink
+                type="profileLink"
+                href={user.portfolioWebsite}
+                title={user.portfolioWebsite}
+              />
+            )}
+            {user.location && (
+              <ProfileLink type="location" title={user.location} />
+            )}
+            <ProfileLink
+              type="joined"
+              title={moment(user.joinedAt.toString()).format("MMMM YYYY")}
             />
-
-            <p className="paragraph-medium text-dark400_light700">
-              {user.location ?? "---"}
-            </p>
           </div>
           <p className="paragraph-regular text-dark400_light800">{user.bio}</p>
         </div>
       </div>
-      <p className="paragram-medium text-dark200_light800">Stars</p>
+      <h3 className="paragram-medium text-dark200_light800 h3-semibold">
+        Stars
+      </h3>
       <div className="flex items-center gap-4 flex-wrap">
-        {/* <AchivementCard /> */}
+        <section className="background-light900_dark200 light-border border px-6 py-4 flex itemce gap-10 rounded-lg w-full max-w-[240px] max-sm:max-w-full">
+          <div className="flex flex-col gap-2">
+            <p className="paragraph-semibold text-dark200_light900">
+              {userInfo.totalQuestions}
+            </p>
+            <p className="body-medium text-dark400_light700">Questions</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="paragraph-semibold text-dark200_light900">
+              {userInfo.totalAnswers}
+            </p>
+            <p className="body-medium text-dark400_light700">Answers</p>
+          </div>
+        </section>
         <AchivementCard type="Gold" />
         <AchivementCard type="Silver" />
         <AchivementCard type="Bronze" />
-      </div>
-      <div className="flex items-start gap-6 max-md-col">
-        <div className="flex flex-[0.6] flex-col items-center gap-4">
-          <h2 className="h2-semibold text-dark200_light900">Top Posts</h2>
-
-          <Button title="Load More" type="secondary" width="fit" />
-        </div>
-        <div className="flex flex-[0.4] flex-col gap-4">
-          <h2 className="h2-semibold text-dark200_light900">Top Tags</h2>
-          <div className="flex-between gap-2">
-            <Tag label="JAVASCRIPTI" />
-            <Tag label="JAVASCRIPTI" />
-          </div>
-        </div>
       </div>
     </section>
   );

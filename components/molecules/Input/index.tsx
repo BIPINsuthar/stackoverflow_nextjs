@@ -13,7 +13,9 @@ export const Input = ({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex items-center gap-1">
-        <p className="paragraph-semibold text-dark400_light800">{label}</p>
+        <p className="paragraph-semibold text-sm text-dark400_light800">
+          {label}
+        </p>
         <p className="text-red-600">*</p>
       </div>
       <div className="flex flex-col gap-2">
@@ -22,7 +24,7 @@ export const Input = ({
             value={value}
             placeholder={placeholder}
             onChange={onChange}
-            className="p-4 h-28 border light-border-2 background-light800_dark300 rounded-lg outline-none w-full text-dark300_light800 paragraph-semibold"
+            className="p-4 h-28 border light-border-2 background-light800_dark300 rounded-lg outline-none w-full text-dark300_light800 paragraph-semibold text-sm"
           />
         ) : (
           <input
@@ -30,7 +32,7 @@ export const Input = ({
             placeholder={placeholder}
             onChange={onChange}
             onKeyDown={onkeydown}
-            className="p-4 border light-border-2 background-light800_dark300 rounded-lg outline-none w-full text-dark300_light800 paragraph-semibold"
+            className="p-4 border light-border-2 background-light800_dark300 rounded-lg outline-none w-full text-dark300_light800 paragraph-semibold text-sm"
           />
         )}
         {error ? (
