@@ -19,7 +19,7 @@ const Communities = async () => {
               picture={item.picture}
               userId={item._id}
               userName={item.username}
-              key={item.userName}
+              key={item._id}
             />
           );
         })}

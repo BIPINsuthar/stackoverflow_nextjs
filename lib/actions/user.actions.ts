@@ -4,22 +4,22 @@ import * as Models from "../model";
 import { revalidatePath } from "next/cache";
 import { User, Question } from "@/types/shared";
 
-export async function deleteUser(clearkId: string) {
+export async function deleteUser(clerkId: string) {
   try {
     connectToDatabase();
 
     const user = await Models.User.findOneAndDelete({
-      clearkId: clearkId,
+      clerkId: clerkId,
     });
     if (!user) {
       throw new Error("User not found!");
     }
     const userQuestionsIds = await Models.Question.find({
-      auther: user._id,
+      author: user._id,
     }).distinct("_id");
 
     //delete user questions
-    await Models.Question.deleteMany({ auther: user._id });
+    await Models.Question.deleteMany({ author: user._id });
 
     const deleteUser = await Models.User.findByIdAndDelete(user._id);
 
@@ -57,10 +57,10 @@ export async function getUserInfo(userId: string) {
     if (!user) throw new Error("User not found!");
 
     const totalQuestions = await Models.Question.countDocuments({
-      userId: user._id,
+      author: user._id,
     });
     const totalAnswers = await Models.Answer.countDocuments({
-      userId: user._id,
+      author: user._id,
     });
 
     return { user, totalQuestions, totalAnswers } as {

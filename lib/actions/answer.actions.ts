@@ -9,7 +9,7 @@ export async function getAllAnswer(questionId: string) {
   try {
     connectToDatabase();
     const answerList = await Models.Answer.find({
-      questionId: questionId,
+      question: questionId,
     })
       .populate("author", "_id clerkId name picture")
       .sort({ createdAt: -1 });
@@ -78,7 +78,7 @@ export async function upvoteAnswers(params: {
       updateQuery = { $addToSet: { upvotes: userId } };
     }
 
-    const question = await Models.Answer.findByIdAndUpdate(
+    const answer = await Models.Answer.findByIdAndUpdate(
       answerId,
       updateQuery,
       {
@@ -86,7 +86,7 @@ export async function upvoteAnswers(params: {
       }
     );
 
-    if (!question) throw new Error("Answer not found!");
+    if (!answer) throw new Error("Answer not found!");
 
     //increment auther reputation
     revalidatePath(path);
@@ -121,7 +121,7 @@ export async function downvoteAnswers(params: {
       updateQuery = { $addToSet: { downvotes: userId } };
     }
 
-    const question = await Models.Answer.findByIdAndUpdate(
+    const answer = await Models.Answer.findByIdAndUpdate(
       answerId,
       updateQuery,
       {
@@ -129,7 +129,7 @@ export async function downvoteAnswers(params: {
       }
     );
 
-    if (!question) throw new Error("Answer not found!");
+    if (!answer) throw new Error("Answer not found!");
 
     //increment auther reputation
     revalidatePath(path);
@@ -152,7 +152,7 @@ export async function getUserAnswers(params: {
     })
       .sort({ upvotes: -1 })
       .populate({
-        path: "questions",
+        path: "question",
         model: Models.Question,
         populate: [
           { path: "tags", model: Models.Tag, select: "_id name" },
