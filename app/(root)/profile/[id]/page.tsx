@@ -9,8 +9,7 @@ import { Icons } from "@/components/atoms";
 // @ts-ignore
 const Profile = async ({ params }) => {
   const user = await Actions.getUserById(params.id);
-
-  return (
+  const questions = await Actions.return(
     <section className="flex flex-1 flex-col gap-6">
       {/* header section */}
       <div className="flex items-start max-md-col gap-4">

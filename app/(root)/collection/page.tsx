@@ -10,10 +10,11 @@ const Collections = async () => {
   const allQuestions = await Actions.allSavedQuestions({
     userId: userId!,
   });
+  console.log("quetion details", allQuestions);
   return (
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
-      {allQuestions.map((item) => {
+      {allQuestions?.map((item) => {
         return (
           <Link href={`/question/${item._id}`}>
             <QuestionCard
@@ -33,7 +34,9 @@ const Collections = async () => {
           </Link>
         );
       })}
-      {allQuestions.length == 0 && <EmptyQuestions />}
+      {(allQuestions?.length == 0 || allQuestions == undefined) && (
+        <EmptyQuestions />
+      )}
     </div>
   );
 };

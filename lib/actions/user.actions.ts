@@ -160,7 +160,7 @@ export async function allSavedQuestions(params: {
       ],
     });
 
-    return allSavedQuestions[0].savedQuestions as Question[];
+    return allSavedQuestions[0]?.savedQuestions as Question[] | [];
   } catch (error) {
     throw error;
   }

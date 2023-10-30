@@ -2,6 +2,7 @@
 import { Button } from "@/components/molecules";
 import { useTheme } from "@/context";
 import Image from "next/image";
+import Link from "next/link";
 
 export const EmptyQuestions = () => {
   const { mode } = useTheme();
@@ -24,7 +25,9 @@ export const EmptyQuestions = () => {
         discussion. our query could be the next big thing others learn from. Get
         involved! 💡
       </p>
-      <Button title="Ask a Question" type="gradient" width="fit" />
+      <Link href={"/ask-question"}>
+        <Button title="Ask a Question" type="gradient" width="fit" />
+      </Link>
     </section>
   );
 };
