@@ -18,7 +18,7 @@ export async function viewQuestion(params: {
         question: questionId,
       });
 
-      if (existingInteraction) return console.log("User has already viewed.");
+      if (existingInteraction) return;
 
       //create interations
       await Models.Question.findByIdAndUpdate(questionId, {

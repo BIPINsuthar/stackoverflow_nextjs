@@ -10,28 +10,28 @@ const Collections = async () => {
   const allQuestions = await Actions.allSavedQuestions({
     userId: userId!,
   });
-  console.log("quetion details", allQuestions);
   return (
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
       {allQuestions?.map((item) => {
         return (
-          <Link href={`/question/${item._id}`}>
-            <QuestionCard
-              title={item.title}
-              user={{
-                name: item.author.name,
-                picture: item.author.picture,
-              }}
-              createdAt={item.createdAt}
-              tags={item.tags}
-              feedBack={{
-                answers: item.answers.length,
-                view: 0,
-                votes: item.upvotes.length,
-              }}
-            />
-          </Link>
+          // <Link href={`/question/${item._id}`}>
+          <QuestionCard
+            title={item.title}
+            user={{
+              name: item.author.name,
+              picture: item.author.picture,
+              clerkId: item.author.clerkId,
+            }}
+            createdAt={item.createdAt}
+            tags={item.tags}
+            feedBack={{
+              answers: item.answers.length,
+              view: 0,
+              votes: item.upvotes.length,
+            }}
+          />
+          // </Link>
         );
       })}
       {(allQuestions?.length == 0 || allQuestions == undefined) && (

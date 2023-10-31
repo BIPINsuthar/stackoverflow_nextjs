@@ -20,7 +20,7 @@ export const EditProfileForm = ({
   bio,
 }: Props) => {
   const { userId } = useAuth();
-  const path = usePathname();
+  const pathName = usePathname();
 
   const formik = useFormik({
     initialValues: {
@@ -31,9 +31,11 @@ export const EditProfileForm = ({
       bio: bio,
     },
     validationSchema: Yup.object().shape({
-      fullName: Yup.string(),
-      userName: Yup.string(),
-      portfolioLink: Yup.string(),
+      fullName: Yup.string().required("fullName is required!"),
+      userName: Yup.string().required("userName is required!"),
+      portfolioLink: Yup.string()
+        .url("Please enter valid url")
+        .required("portfolioLink is required!"),
       location: Yup.string(),
       bio: Yup.string(),
     }),
@@ -41,7 +43,7 @@ export const EditProfileForm = ({
       try {
         await Actions.updateUser({
           clerkId: userId!,
-          path: path,
+          path: pathName,
           updateData: {
             name: values.fullName,
             username: values.userName,
@@ -64,6 +66,7 @@ export const EditProfileForm = ({
         onChange={(e) =>
           formik.setFieldValue("fullName", e.target.value, false)
         }
+        error={formik.errors.fullName}
       />
       <Input
         label="Username"
@@ -71,6 +74,7 @@ export const EditProfileForm = ({
         onChange={(e) =>
           formik.setFieldValue("userName", e.target.value, false)
         }
+        error={formik.errors.userName}
       />
       <Input
         label="Portfolio link"
@@ -78,6 +82,7 @@ export const EditProfileForm = ({
         onChange={(e) =>
           formik.setFieldValue("portfolioLink", e.target.value, false)
         }
+        error={formik.errors.portfolioLink}
       />
       <Input
         label="Localtion"
@@ -85,12 +90,14 @@ export const EditProfileForm = ({
         onChange={(e) =>
           formik.setFieldValue("location", e.target.value, false)
         }
+        error={formik.errors.location}
       />
       <Input
         label="Bio"
         type="textarea"
         value={formik.values.bio}
         onChange={(e) => formik.setFieldValue("bio", e.target.value, false)}
+        error={formik.errors.bio}
       />
       <Button
         onClick={formik.handleSubmit}

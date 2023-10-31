@@ -18,7 +18,21 @@ interface AskQustionProps {
   tag: string;
 }
 
-export const Question = ({ userId }: { userId: string }) => {
+export const Question = ({
+  userId,
+  type,
+  questionId,
+  title,
+  content,
+  tags,
+}: {
+  userId: string;
+  type?: "create" | "edit";
+  title?: string;
+  questionId?: string;
+  content?: string;
+  tags?: string[];
+}) => {
   const router = useRouter();
   const pathName = usePathname();
   const editorRef = useRef(null);
@@ -26,11 +40,12 @@ export const Question = ({ userId }: { userId: string }) => {
 
   const formik = useFormik<AskQustionProps>({
     initialValues: {
-      questionTitle: "",
-      problemExplanation: "",
-      tags: [],
+      questionTitle: title ?? "",
+      problemExplanation: content ?? "",
+      tags: tags ?? [],
       tag: "",
     },
+    enableReinitialize: true,
     validationSchema: Yup.object().shape({
       questionTitle: Yup.string().required("title is required!"),
       problemExplanation: Yup.string().required(
@@ -40,16 +55,30 @@ export const Question = ({ userId }: { userId: string }) => {
     }),
     onSubmit: async (values) => {
       try {
-        await Actions.createQuestion({
-          title: values.questionTitle,
-          content: values.problemExplanation,
-          author: userId,
-          tags: values.tags,
-          path: pathName!,
-        });
+        if (type == "edit" && questionId) {
+          await Actions.updateQuestion({
+            questionId: questionId,
+            updateData: {
+              title: values.questionTitle,
+              content: values.problemExplanation,
+              tags: values.tags,
+            },
+            path: pathName!,
+          });
+          router.push("/");
+        } else {
+          await Actions.createQuestion({
+            title: values.questionTitle,
+            content: values.problemExplanation,
+            author: userId,
+            tags: values.tags,
+            path: pathName!,
+          });
+        }
+
         router.push("/");
       } catch (error) {
-        console.log("error while creating question", error);
+        console.log("error while creating question or updating", error);
       }
     },
   });
@@ -175,7 +204,7 @@ export const Question = ({ userId }: { userId: string }) => {
       </div>
       <Button
         isDisabled={formik.isSubmitting}
-        title={"Ask a Question"}
+        title={type == "edit" ? "Update Question" : "Ask a Question"}
         onClick={formik.handleSubmit}
         type="gradient"
         width="fit"

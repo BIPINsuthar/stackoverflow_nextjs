@@ -1,12 +1,13 @@
 import { EditProfileForm } from "@/components/forms/EditProfile";
-import { auth } from "@clerk/nextjs";
 
 import * as Actions from "../../../../lib/actions";
+import { auth } from "@clerk/nextjs";
 
-const EditProfile = async () => {
+const EditProfile = async ({}) => {
   const { userId } = auth();
 
-  const user = await Actions.getUserById(userId!);
+  const userDetail = await Actions.getUserInfo(userId!);
+  const user = userDetail.user;
 
   return (
     <div className="flex flex-1 flex-col gap-4">

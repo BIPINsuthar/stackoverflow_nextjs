@@ -24,6 +24,7 @@ const TagQuestions = async ({ params }) => {
               user={{
                 name: item.author.name,
                 picture: item.author.picture,
+                clerkId: item.author.clerkId,
               }}
               tags={item.tags}
             />

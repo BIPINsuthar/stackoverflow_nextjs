@@ -54,6 +54,7 @@ const Home = async () => {
               user={{
                 name: item.author.name,
                 picture: item.author.picture,
+                clerkId: item.author.clerkId,
               }}
               createdAt={item.createdAt}
               feedBack={{

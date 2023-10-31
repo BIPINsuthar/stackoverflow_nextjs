@@ -9,11 +9,13 @@ export interface Props {
     votes: number;
   };
   createdAt: Date;
+  _id?: string;
 }
 
 export type User = {
   name: string;
   picture: string;
+  clerkId: string;
 };
 export type Tag = {
   name: string;

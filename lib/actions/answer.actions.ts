@@ -169,3 +169,35 @@ export async function getUserAnswers(params: {
     throw error;
   }
 }
+
+export async function deleteAnswer(params: { answerId: string; path: string }) {
+  try {
+    connectToDatabase();
+    const { answerId, path } = params;
+
+    const answer = await Models.Answer.findById(answerId);
+
+    if (!answer) {
+      throw new Error("Answer not found!");
+    }
+
+    await Models.Answer.deleteOne({ _id: answerId });
+
+    await Models.Question.updateMany(
+      {
+        _id: answerId,
+      },
+      {
+        $pull: { answers: answerId },
+      }
+    );
+
+    await Models.Interaction.deleteMany({
+      answer: answerId,
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    throw error;
+  }
+}

@@ -5,6 +5,7 @@ import * as Models from "../model";
 
 import { revalidatePath } from "next/cache";
 import { Question } from "@/types/shared";
+import console from "console";
 
 export async function getAllQuestion() {
   try {
@@ -72,7 +73,27 @@ export async function createQuestion(params: {
     console.log("creating question", error);
   }
 }
-
+export async function updateQuestion(params: {
+  questionId: string;
+  updateData: Partial<{
+    title: string;
+    content: string;
+    tags: string[];
+  }>;
+  path: string;
+}) {
+  try {
+    connectToDatabase();
+    const { questionId, updateData, path } = params;
+    await Models.Question.findByIdAndUpdate(questionId, {
+      ...updateData,
+      tags: undefined,
+    });
+    revalidatePath(path);
+  } catch (error) {
+    throw error;
+  }
+}
 export async function getQuestionById(questionId: string) {
   try {
     const question = (await Models.Question.findById(questionId)
@@ -206,6 +227,45 @@ export async function getUserQuestions(params: {
 
     return { questions: userQuestionsList } as { questions: Question[] };
   } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: {
+  questionId: string;
+  path: string;
+}) {
+  try {
+    connectToDatabase();
+    const { questionId, path } = params;
+
+    await Models.Question.findByIdAndDelete(questionId);
+    await Models.Answer.deleteMany({
+      question: questionId,
+    });
+    await Models.Interaction.deleteMany({
+      question: questionId,
+    });
+
+    await Models.User.findOneAndUpdate(
+      { savedQuestions: { $in: [questionId] } },
+      {
+        $pull: { savedQuestions: questionId },
+      }
+    );
+
+    await Models.Tag.updateMany(
+      {
+        questions: questionId,
+      },
+      {
+        $pull: { questions: questionId },
+      }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log("eror", error);
     throw error;
   }
 }

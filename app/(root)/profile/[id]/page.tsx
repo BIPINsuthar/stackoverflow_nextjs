@@ -4,9 +4,12 @@ import Link from "next/link";
 import * as Actions from "../../../../lib/actions";
 import { Icons } from "@/components/atoms";
 import moment from "moment";
+import { TopAnswers } from "../Components/TopAnswers";
+import { TopQuestions } from "../Components/TopQuestions";
 
 // @ts-ignore
 const Profile = async ({ params }) => {
+  if (!params.id) return null;
   const userInfo = await Actions.getUserInfo(params.id);
 
   const user = userInfo.user;
@@ -19,7 +22,7 @@ const Profile = async ({ params }) => {
         <div className="flex flex-col gap-4 w-full">
           <div className="flex-between max-md-col w-full">
             <h1 className="h1-bold text-dark100_light900">{user.name}</h1>
-            <Link href={"/edit"}>
+            <Link href={`/profile/edit`}>
               <Button title="Edit Profile" type="light" width="fit" />
             </Link>
           </div>
@@ -67,6 +70,10 @@ const Profile = async ({ params }) => {
         <AchivementCard type="Silver" />
         <AchivementCard type="Bronze" />
       </div>
+      <p className="paragraph-semibold text-dark200_light900">Questions</p>
+      <TopQuestions userId={user._id} />
+      <p className="paragraph-semibold text-dark200_light900">Answers</p>
+      <TopAnswers userId={user._id} />
     </section>
   );
 };
