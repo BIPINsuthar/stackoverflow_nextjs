@@ -1,4 +1,3 @@
-import Link from "next/link";
 import * as Actions from "../../../../../lib/actions";
 import { Props } from "./types";
 import { QuestionCard } from "@/components/organisms";
@@ -14,7 +13,6 @@ export const TopQuestions = async ({ userId }: Props) => {
     <div className="flex flex-col gap-4">
       {userQuestion.questions.map((item) => {
         return (
-          //   <Link href={`/question/${item._id}`}>
           <QuestionCard
             _id={item._id}
             key={item.title}
@@ -32,7 +30,6 @@ export const TopQuestions = async ({ userId }: Props) => {
             }}
             tags={item.tags}
           />
-          //   </Link>
         );
       })}
     </div>

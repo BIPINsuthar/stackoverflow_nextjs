@@ -1,18 +1,43 @@
 "use server";
 import { connectToDatabase } from "../mongoose";
 import * as Models from ".././model";
-import { Answer } from "@/types/shared";
+import { Answer, AnswerFilter } from "@/types/shared";
 import { revalidatePath } from "next/cache";
 import { getUserById } from ".";
 
-export async function getAllAnswer(questionId: string) {
+export async function getAllAnswer(params: {
+  questionId: string;
+  filter: AnswerFilter;
+}) {
   try {
     connectToDatabase();
+    const { filter, questionId } = params;
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case "highestupvotes":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "lowestupvotes":
+        sortOptions = { upvotes: 1 };
+        break;
+      case "old":
+        sortOptions = { createdAt: 1 };
+        break;
+      case "recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      default:
+        sortOptions = { createdAt: -1 };
+        break;
+    }
+
     const answerList = await Models.Answer.find({
       question: questionId,
     })
       .populate("author", "_id clerkId name picture")
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
 
     return answerList as Answer[];
   } catch (error) {

@@ -4,14 +4,64 @@ import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 
 import { revalidatePath } from "next/cache";
-import { Question } from "@/types/shared";
+import { HomePageFilter, Question } from "@/types/shared";
 import console from "console";
 
-export async function getAllQuestion() {
+export async function getHotQuestions() {
+  try {
+    connectToDatabase();
+    const hotQuestions = await Models.Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+
+    return hotQuestions as Question[];
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getAllQuestion(params: {
+  searchQuery: string;
+  filter: HomePageFilter;
+  pageNo: string;
+}) {
   try {
     connectToDatabase();
 
-    const questions = await Models.Question.find({})
+    const { searchQuery, filter, pageNo } = params;
+
+    const pageSize = 10;
+
+    const skip = (parseInt(pageNo) - 1) * pageSize;
+
+    let query = {};
+    let sort = {};
+
+    switch (filter) {
+      case "newest":
+        sort = { createdAt: -1 };
+        break;
+      case "frequent":
+        sort = { views: -1 };
+        break;
+      case "unanswered":
+        query = {
+          answers: { $size: 0 },
+        };
+        break;
+      default:
+        break;
+    }
+
+    query = {
+      ...query,
+      $or: [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { content: { $regex: new RegExp(searchQuery, "i") } },
+      ],
+    };
+
+    const questions = await Models.Question.find(query)
       .populate({
         path: "tags",
         model: Models.Tag,
@@ -20,9 +70,23 @@ export async function getAllQuestion() {
         path: "author",
         model: Models.User,
       })
-      .sort({ createdAt: -1 });
+      .sort(sort)
+      .skip(skip)
+      .limit(pageSize);
 
-    return questions as Question[];
+    const totalQuestions = await Models.Question.countDocuments(query);
+
+    const hasNextPage = skip + questions.length < totalQuestions;
+
+    return {
+      questions,
+      totalQuestions: totalQuestions,
+      isNext: hasNextPage,
+    } as {
+      questions: Question[];
+      totalQuestions: number;
+      isNext: boolean;
+    };
   } catch (error) {
     console.log("error while questions data", error);
   }

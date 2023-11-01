@@ -14,7 +14,7 @@ export const QuestionCard = ({
 }: Props) => {
   return (
     <section className="flex flex-col gap-6 rounded-lg background-light900_dark200 p-6 light-border border">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between cursor-pointer">
         <h3 className="h3-semibold text-dark200_light900 line-clamp-2">
           {title}
         </h3>

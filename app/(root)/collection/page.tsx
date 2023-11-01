@@ -1,18 +1,31 @@
-import { EmptyQuestions } from "./components/EmptyQuestions";
-
 import * as Actions from "../../../lib/actions";
 import { auth } from "@clerk/nextjs";
 import { QuestionCard } from "@/components/organisms";
-import Link from "next/link";
+import { EmptyQuestions, SearchBar } from "@/components/molecules";
+import { CollectionSearchParams, SearchParams } from "@/types/shared";
+import { CollectionsFilter } from "./Components/CollectionsFilter";
 
-const Collections = async () => {
+const Collections = async ({
+  searchParams,
+}: {
+  searchParams: CollectionSearchParams;
+}) => {
   const { userId } = auth();
+
   const allQuestions = await Actions.allSavedQuestions({
     userId: userId!,
+    searchQuery: searchParams.search,
+    filter: searchParams.filter,
   });
+
   return (
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
+      <div className="flex items-center gap-10">
+        <SearchBar route={"/collection"} placeholder="Search for questions" />
+        <CollectionsFilter />
+      </div>
+
       {allQuestions?.map((item) => {
         return (
           // <Link href={`/question/${item._id}`}>

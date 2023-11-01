@@ -2,7 +2,12 @@
 import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
-import { User, Question } from "@/types/shared";
+import {
+  User,
+  Question,
+  CommunityFilter,
+  CollectionFilter,
+} from "@/types/shared";
 
 export async function deleteUser(clerkId: string) {
   try {
@@ -135,13 +140,46 @@ export async function updateUser(params: UpdateUserParams) {
   }
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(params: {
+  searchQuery: string;
+  filter: CommunityFilter;
+}) {
   try {
     connectToDatabase();
 
-    const allUsers = await Models.User.find({}).sort({
-      createdAt: -1,
-    });
+    const { searchQuery, filter } = params;
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case "new user":
+        sortOptions = { joinedAt: -1 };
+        break;
+      case "old user":
+        sortOptions = { joinedAt: 1 };
+        break;
+      case "top contributors":
+        sortOptions = { reputation: -1 };
+        break;
+      default:
+        break;
+    }
+
+    const query = {
+      $or: [
+        {
+          name: { $regex: new RegExp(searchQuery, "i") },
+        },
+        {
+          username: { $regex: new RegExp(searchQuery, "i") },
+        },
+        {
+          email: { $regex: new RegExp(searchQuery, "i") },
+        },
+      ],
+    };
+
+    const allUsers = await Models.User.find(query).sort(sortOptions);
 
     return allUsers;
   } catch (error) {
@@ -152,15 +190,38 @@ export async function getAllUsers() {
 export async function allSavedQuestions(params: {
   userId: string;
   searchQuery?: string;
+  filter: CollectionFilter;
 }) {
   try {
     connectToDatabase();
 
-    const { userId, searchQuery } = params;
+    const { userId, searchQuery, filter } = params;
+
+    let sortOptions = {};
 
     const query = searchQuery
-      ? { title: { $regx: new RegExp(searchQuery, "i") } }
+      ? { title: { $regex: new RegExp(searchQuery, "i") } }
       : {};
+
+    switch (filter) {
+      case "most recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortOptions = { createdAt: 1 };
+        break;
+      case "most voted":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "most viewed":
+        sortOptions = { views: -1 };
+        break;
+      case "most answered":
+        sortOptions = { answers: -1 };
+        break;
+      default:
+        break;
+    }
 
     const allSavedQuestions = await Models.User.find(
       {
@@ -175,7 +236,7 @@ export async function allSavedQuestions(params: {
       model: Models.Question,
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOptions,
       },
       populate: [
         { path: "tags", model: Models.Tag, select: "_id name" },

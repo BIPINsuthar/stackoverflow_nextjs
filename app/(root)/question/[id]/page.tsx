@@ -3,19 +3,24 @@ import React from "react";
 import * as Actions from "../../../../lib/actions";
 
 import { FeedbackCenter, Time, Voting } from "@/components/molecules/Actions";
-import { UserInfo } from "@/components/molecules";
+import { Filter, UserInfo } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { ParseHtml } from "@/components/shared";
 import { Answer } from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
 import { SavedQuestion } from "../Components/savedQuestion";
+import { AnswerFilter } from "../Components/AnswerFilter";
+import { QuestionPage } from "@/types/shared";
 
-// @ts-ignore
-const Question = async ({ params }) => {
+const Question = async ({ params, searchParams }: QuestionPage) => {
   const { userId: clerkId } = auth();
 
   const question = await Actions.getQuestionById(params?.id);
-  const answerList = await Actions.getAllAnswer(question._id);
+
+  const answerList = await Actions.getAllAnswer({
+    questionId: question._id,
+    filter: searchParams.filter,
+  });
 
   const user = await Actions.getUserById(clerkId!);
 
@@ -65,6 +70,14 @@ const Question = async ({ params }) => {
           return <Tag label={item.name} key={item._id} />;
         })}
       </div>
+      {answerList.length > 0 && (
+        <div className="flex items-center justify-between">
+          <p className="paragraph-medium primary-text-gradient">
+            {answerList.length} Answers
+          </p>
+          <AnswerFilter />
+        </div>
+      )}
       <div>
         {answerList.map((item) => {
           return (

@@ -3,4 +3,5 @@ export interface Props {
   onDelete?: () => void;
   size?: "small" | "big";
   isActive?: boolean;
+  onClick?: () => void;
 }

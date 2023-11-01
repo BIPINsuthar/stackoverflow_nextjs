@@ -52,3 +52,85 @@ export interface CreateAnswerParams {
   content: string;
   path: string;
 }
+
+export type HomePageFilter =
+  | "unanswered"
+  | "recommended questions"
+  | "newest"
+  | "frequent";
+
+export type CommunityFilter = "new user" | "old user" | "top contributors";
+
+export type CollectionFilter =
+  | "most recent"
+  | "oldest"
+  | "most voted"
+  | "most viewed"
+  | "most answered";
+
+export type TagsFilter = "popular" | "recent" | "name" | "old";
+
+export type TagQuestionFilter =
+  | "highestupvotes"
+  | "lowestupvotes"
+  | "recent"
+  | "old";
+
+export type AnswerFilter =
+  | "highestupvotes"
+  | "lowestupvotes"
+  | "recent"
+  | "old";
+
+export type SearchParams = {
+  search: string;
+};
+
+export type HomePageSearchParams = {
+  search: string;
+  filter: HomePageFilter;
+  page: string;
+};
+
+export type CommunitySearchParams = {
+  search: string;
+  filter: CommunityFilter;
+};
+
+export type CollectionSearchParams = {
+  search: string;
+  filter: CollectionFilter;
+};
+
+export type TagSearchParams = {
+  search: string;
+  filter: TagsFilter;
+};
+
+export type TagQuestionParams = {
+  id: string;
+};
+
+export type QuestionParams = {
+  id: string;
+};
+
+export type QuestionSearchParams = {
+  search: string;
+  filter: AnswerFilter;
+};
+
+export type TagQuestionSearchParams = {
+  search: string;
+  filter: TagQuestionFilter;
+};
+
+export type TagQuestionPage = {
+  params: TagQuestionParams;
+  searchParams: TagQuestionSearchParams;
+};
+
+export type QuestionPage = {
+  params: QuestionParams;
+  searchParams: QuestionSearchParams;
+};

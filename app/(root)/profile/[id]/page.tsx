@@ -6,6 +6,7 @@ import { Icons } from "@/components/atoms";
 import moment from "moment";
 import { TopAnswers } from "../Components/TopAnswers";
 import { TopQuestions } from "../Components/TopQuestions";
+import { SwitchButton } from "../Components/SwitchButton";
 
 // @ts-ignore
 const Profile = async ({ params }) => {
@@ -70,10 +71,10 @@ const Profile = async ({ params }) => {
         <AchivementCard type="Silver" />
         <AchivementCard type="Bronze" />
       </div>
-      <p className="paragraph-semibold text-dark200_light900">Questions</p>
-      <TopQuestions userId={user._id} />
-      <p className="paragraph-semibold text-dark200_light900">Answers</p>
-      <TopAnswers userId={user._id} />
+      <SwitchButton
+        questions={<TopQuestions userId={user._id} />}
+        answers={<TopAnswers userId={user._id} />}
+      />
     </section>
   );
 };
