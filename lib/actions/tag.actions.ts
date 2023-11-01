@@ -53,10 +53,15 @@ export async function getTopInteractedTags(params: {
 export async function getAllTags(params: {
   searchQuery: string;
   filter: TagsFilter;
+  pageNo: number;
 }) {
   try {
     await connectToDatabase();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, pageNo } = params;
+
+    const pageSize = 1;
+
+    const skip = (pageNo - 1) * pageSize;
 
     let sortOptions = {};
 
@@ -79,11 +84,23 @@ export async function getAllTags(params: {
         break;
     }
 
-    const tagList = await Models.Tag.find({
+    const query = {
       name: { $regex: new RegExp(searchQuery, "i") },
-    }).sort(sortOptions);
+    };
 
-    return tagList as Tag[];
+    const tagList = await Models.Tag.find(query)
+      .skip(skip)
+      .limit(pageSize)
+      .sort(sortOptions);
+
+    const totalTags = await Models.Tag.countDocuments(query);
+    const isNext = totalTags > skip + tagList.length;
+
+    return {
+      tagList: tagList,
+      totalTags: totalTags,
+      isNext: isNext,
+    };
   } catch (error) {
     throw error;
   }
@@ -93,10 +110,15 @@ export async function getQuestionByTagId(params: {
   tagId: string;
   searchQuery: string;
   filter: TagQuestionFilter;
+  pageNo: number;
 }) {
   try {
     await connectToDatabase();
-    const { searchQuery, tagId, filter } = params;
+    const { searchQuery, tagId, filter, pageNo } = params;
+
+    const pageSize = 1;
+
+    const skip = (pageNo - 1) * pageSize;
 
     let sortOptions = {};
 
@@ -128,7 +150,7 @@ export async function getQuestionByTagId(params: {
       ],
     };
 
-    const tagDetails = await Models.Tag.findById(tagId, {
+    const tagDetails = (await Models.Tag.findById(tagId, {
       questions: 1,
       name: 1,
       _id: 0,
@@ -136,7 +158,11 @@ export async function getQuestionByTagId(params: {
       path: "questions",
       model: Models.Question,
       match: query,
-      options: sortOptions,
+      options: {
+        sort: sortOptions,
+        skip: skip,
+        limit: pageSize + 1,
+      },
       populate: [
         {
           path: "author",
@@ -149,9 +175,13 @@ export async function getQuestionByTagId(params: {
           select: "_id name",
         },
       ],
-    });
+    })) as Tag;
+
     if (!tagDetails) throw new Error("Tag not found!");
-    return tagDetails as Tag;
+
+    const isNext = tagDetails.questions.length > pageSize;
+
+    return { tagDetails: tagDetails as Tag, isNext: isNext };
   } catch (error) {
     throw error;
   }

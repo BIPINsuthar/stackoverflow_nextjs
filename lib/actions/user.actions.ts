@@ -143,11 +143,16 @@ export async function updateUser(params: UpdateUserParams) {
 export async function getAllUsers(params: {
   searchQuery: string;
   filter: CommunityFilter;
+  pageNo: number;
 }) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, pageNo } = params;
+
+    const pageSize = 1;
+
+    const skip = (pageNo - 1) * pageSize;
 
     let sortOptions = {};
 
@@ -179,9 +184,17 @@ export async function getAllUsers(params: {
       ],
     };
 
-    const allUsers = await Models.User.find(query).sort(sortOptions);
+    const allUsers = await Models.User.find(query)
+      .skip(skip)
+      .limit(pageSize)
+      .sort(sortOptions);
 
-    return allUsers;
+    const totalUsers = await Models.User.countDocuments(query);
+
+    const isNext = totalUsers > skip + allUsers.length;
+
+    console.log("sdf", totalUsers, isNext, skip, allUsers.length, pageNo);
+    return { users: allUsers, isNext };
   } catch (error) {
     throw error;
   }
@@ -191,15 +204,20 @@ export async function allSavedQuestions(params: {
   userId: string;
   searchQuery?: string;
   filter: CollectionFilter;
+  pageNo: number;
 }) {
   try {
     connectToDatabase();
 
-    const { userId, searchQuery, filter } = params;
+    const { userId, searchQuery, filter, pageNo } = params;
 
     let sortOptions = {};
 
-    const query = searchQuery
+    const pageSize = 1;
+
+    const skip = (pageNo - 1) * pageSize;
+
+    const questionQuery = searchQuery
       ? { title: { $regex: new RegExp(searchQuery, "i") } }
       : {};
 
@@ -223,19 +241,13 @@ export async function allSavedQuestions(params: {
         break;
     }
 
-    const allSavedQuestions = await Models.User.find(
-      {
-        clerkId: userId,
-      },
-      {
-        savedQuestions: 1,
-        _id: 0,
-      }
-    ).populate({
+    const user = (await Models.User.findOne({ clerkId: userId }).populate({
       path: "savedQuestions",
       model: Models.Question,
-      match: query,
+      match: questionQuery,
       options: {
+        skip: skip,
+        limit: pageSize,
         sort: sortOptions,
       },
       populate: [
@@ -246,9 +258,23 @@ export async function allSavedQuestions(params: {
           select: "_id clerkId name picture",
         },
       ],
+    })) as User;
+
+    const totalQuestions = await Models.Question.countDocuments({
+      author: user._id,
     });
 
-    return allSavedQuestions[0]?.savedQuestions as Question[] | [];
+    const isNext = totalQuestions > skip + user.savedQuestions.length;
+
+    return {
+      questions: user.savedQuestions,
+      totalQuestions: totalQuestions,
+      isNext: isNext,
+    } as {
+      questions: Question[];
+      totalQuestions: number;
+      isNext: boolean;
+    };
   } catch (error) {
     throw error;
   }

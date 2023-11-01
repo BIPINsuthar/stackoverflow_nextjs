@@ -9,7 +9,7 @@ export const PaginationBox = ({ currentPage, isNext }: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [page, setPage] = useState(parseInt(currentPage));
+  const [page, setPage] = useState(currentPage);
 
   const handleIncreasePage = () => {
     if (isNext) {

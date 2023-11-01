@@ -23,16 +23,16 @@ export async function getHotQuestions() {
 export async function getAllQuestion(params: {
   searchQuery: string;
   filter: HomePageFilter;
-  pageNo: string;
+  pageNo: number;
 }) {
   try {
     connectToDatabase();
 
     const { searchQuery, filter, pageNo } = params;
 
-    const pageSize = 10;
+    const pageSize = 1;
 
-    const skip = (parseInt(pageNo) - 1) * pageSize;
+    const skip = (pageNo - 1) * pageSize;
 
     let query = {};
     let sort = {};
@@ -78,6 +78,7 @@ export async function getAllQuestion(params: {
 
     const hasNextPage = skip + questions.length < totalQuestions;
 
+    console.log(skip, questions.length, totalQuestions);
     return {
       questions,
       totalQuestions: totalQuestions,

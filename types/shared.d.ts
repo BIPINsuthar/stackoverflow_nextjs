@@ -89,22 +89,25 @@ export type SearchParams = {
 export type HomePageSearchParams = {
   search: string;
   filter: HomePageFilter;
-  page: string;
+  page?: number;
 };
 
 export type CommunitySearchParams = {
   search: string;
   filter: CommunityFilter;
+  page: number;
 };
 
 export type CollectionSearchParams = {
   search: string;
   filter: CollectionFilter;
+  page: number;
 };
 
 export type TagSearchParams = {
   search: string;
   filter: TagsFilter;
+  page: number;
 };
 
 export type TagQuestionParams = {
@@ -123,6 +126,7 @@ export type QuestionSearchParams = {
 export type TagQuestionSearchParams = {
   search: string;
   filter: TagQuestionFilter;
+  page: number;
 };
 
 export type TagQuestionPage = {

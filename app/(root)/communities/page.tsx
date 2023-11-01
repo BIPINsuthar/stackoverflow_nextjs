@@ -1,4 +1,9 @@
-import { CommunityCard, Filter, SearchBar } from "@/components/molecules";
+import {
+  CommunityCard,
+  Filter,
+  PaginationBox,
+  SearchBar,
+} from "@/components/molecules";
 
 import * as Actions from "../../../lib/actions";
 import Link from "next/link";
@@ -10,9 +15,10 @@ const Communities = async ({
 }: {
   searchParams: CommunitySearchParams;
 }) => {
-  const users = await Actions.getAllUsers({
+  const results = await Actions.getAllUsers({
     searchQuery: searchParams.search,
     filter: searchParams.filter,
+    pageNo: searchParams.page ?? 1,
   });
 
   return (
@@ -23,7 +29,7 @@ const Communities = async ({
         <UserFilter />
       </div>
       <div className="flex items-center gap-2 flex-wrap">
-        {users.map((item) => {
+        {results.users.map((item) => {
           return (
             <Link href={`profile/${item.clerkId}`} className="cursor-pointer">
               <CommunityCard
@@ -37,6 +43,10 @@ const Communities = async ({
           );
         })}
       </div>
+      <PaginationBox
+        isNext={results.isNext}
+        currentPage={searchParams.page ? searchParams.page : 1}
+      />
     </section>
   );
 };

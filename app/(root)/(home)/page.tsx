@@ -25,7 +25,7 @@ const Home = async ({
   const result = await Actions.getAllQuestion({
     searchQuery: search,
     filter: filter,
-    pageNo: searchParams.page,
+    pageNo: searchParams.page ?? 1,
   });
 
   return (
@@ -64,7 +64,7 @@ const Home = async ({
       {result?.questions.length != 0 && (
         <PaginationBox
           isNext={result?.isNext ?? false}
-          currentPage={searchParams.page ? searchParams.page : "1"}
+          currentPage={searchParams.page ? searchParams.page : 1}
         />
       )}
     </div>

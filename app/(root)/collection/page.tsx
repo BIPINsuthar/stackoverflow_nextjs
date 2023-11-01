@@ -1,7 +1,11 @@
 import * as Actions from "../../../lib/actions";
 import { auth } from "@clerk/nextjs";
 import { QuestionCard } from "@/components/organisms";
-import { EmptyQuestions, SearchBar } from "@/components/molecules";
+import {
+  EmptyQuestions,
+  PaginationBox,
+  SearchBar,
+} from "@/components/molecules";
 import { CollectionSearchParams, SearchParams } from "@/types/shared";
 import { CollectionsFilter } from "./Components/CollectionsFilter";
 
@@ -12,10 +16,11 @@ const Collections = async ({
 }) => {
   const { userId } = auth();
 
-  const allQuestions = await Actions.allSavedQuestions({
+  const results = await Actions.allSavedQuestions({
     userId: userId!,
     searchQuery: searchParams.search,
     filter: searchParams.filter,
+    pageNo: searchParams.page ?? 1,
   });
 
   return (
@@ -25,8 +30,7 @@ const Collections = async ({
         <SearchBar route={"/collection"} placeholder="Search for questions" />
         <CollectionsFilter />
       </div>
-
-      {allQuestions?.map((item) => {
+      {results.questions?.map((item) => {
         return (
           // <Link href={`/question/${item._id}`}>
           <QuestionCard
@@ -47,9 +51,11 @@ const Collections = async ({
           // </Link>
         );
       })}
-      {(allQuestions?.length == 0 || allQuestions == undefined) && (
-        <EmptyQuestions />
-      )}
+      {results.totalQuestions == 0 && <EmptyQuestions />}
+      <PaginationBox
+        isNext={results.isNext}
+        currentPage={searchParams.page ? searchParams.page : 1}
+      />
     </div>
   );
 };

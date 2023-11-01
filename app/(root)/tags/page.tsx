@@ -3,14 +3,15 @@ import { TagCard } from "@/components/organisms";
 
 import * as Actions from "../../../lib/actions";
 import Link from "next/link";
-import { SearchBar } from "@/components/molecules";
+import { PaginationBox, SearchBar } from "@/components/molecules";
 import { TagSearchParams } from "@/types/shared";
 import { TagFilter } from "./Components/TagFilter";
 
 const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
-  const tags = await Actions.getAllTags({
+  const results = await Actions.getAllTags({
     searchQuery: searchParams.search,
     filter: searchParams.filter,
+    pageNo: searchParams.page ?? 1,
   });
 
   return (
@@ -22,7 +23,7 @@ const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
-        {tags.map((item) => {
+        {results.tagList.map((item) => {
           return (
             <Link href={`/tags/${item._id}`}>
               <TagCard
@@ -34,6 +35,10 @@ const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
           );
         })}
       </div>
+      <PaginationBox
+        isNext={results?.isNext ?? false}
+        currentPage={searchParams.page ? searchParams.page : 1}
+      />
     </section>
   );
 };
