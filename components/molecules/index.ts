@@ -1,6 +1,6 @@
 export * from "./Button";
 export * from "./ListMenu";
-export * from "./SearchBar";
+export * from "../search/SearchBar";
 export * as Badges from "./Badges";
 export * from "./AchivementCard";
 export * from "./CommunityCard";

@@ -3,3 +3,4 @@ export * from "./user.actions";
 export * from "./tag.actions";
 export * from "./answer.actions";
 export * from "./interaction.actions";
+export * from "./general.actions";

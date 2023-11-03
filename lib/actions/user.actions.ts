@@ -2,12 +2,13 @@
 import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 import { revalidatePath } from "next/cache";
+import { User, Question } from "@/types/shared";
 import {
-  User,
-  Question,
-  CommunityFilter,
-  CollectionFilter,
-} from "@/types/shared";
+  AllSavedQuestionsProps,
+  CreateUserProps,
+  GetAllUserProps,
+  UpdateUserParams,
+} from "@/types/action";
 
 export async function deleteUser(clerkId: string) {
   try {
@@ -108,7 +109,7 @@ export async function saveQuetion(
   }
 }
 
-export async function createUser(userData: Partial<Models.IUser>) {
+export async function createUser(userData: CreateUserProps) {
   try {
     connectToDatabase();
     const newUser = await Models.User.create(userData);
@@ -116,12 +117,6 @@ export async function createUser(userData: Partial<Models.IUser>) {
   } catch (error) {
     throw error;
   }
-}
-
-interface UpdateUserParams {
-  clerkId: string;
-  updateData: Partial<Models.IUser>;
-  path: string;
 }
 
 export async function updateUser(params: UpdateUserParams) {
@@ -140,11 +135,7 @@ export async function updateUser(params: UpdateUserParams) {
   }
 }
 
-export async function getAllUsers(params: {
-  searchQuery: string;
-  filter: CommunityFilter;
-  pageNo: number;
-}) {
+export async function getAllUsers(params: GetAllUserProps) {
   try {
     connectToDatabase();
 
@@ -193,19 +184,13 @@ export async function getAllUsers(params: {
 
     const isNext = totalUsers > skip + allUsers.length;
 
-    console.log("sdf", totalUsers, isNext, skip, allUsers.length, pageNo);
     return { users: allUsers, isNext };
   } catch (error) {
     throw error;
   }
 }
 
-export async function allSavedQuestions(params: {
-  userId: string;
-  searchQuery?: string;
-  filter: CollectionFilter;
-  pageNo: number;
-}) {
+export async function allSavedQuestions(params: AllSavedQuestionsProps) {
   try {
     connectToDatabase();
 

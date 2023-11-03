@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Theme } from "./Theme";
 
 import * as Templates from "../../templates";
-import * as Molecules from "../../molecules";
+
+import { GlobalSearch } from "@/components/search/GlobalSearch";
 
 export const NavBar = () => {
   return (
@@ -22,7 +23,7 @@ export const NavBar = () => {
         </p>
       </Link>
       <div className="w-full max-w-[600px]">
-        <Molecules.SearchBar />
+        <GlobalSearch />
       </div>
       <div className="flex items-center gap-6">
         <Theme />

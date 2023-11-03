@@ -1,7 +1,12 @@
 "use server";
-import { Tag, TagQuestionFilter, TagsFilter } from "@/types/shared";
+import { Tag } from "@/types/shared";
 import * as Models from ".././model";
 import { connectToDatabase } from "../mongoose";
+import {
+  GetAllTagsProps,
+  GetTopInteractedTagProps,
+  getQuestionsByTagIdProps,
+} from "@/types/action";
 
 export async function getPopularTags() {
   try {
@@ -32,10 +37,7 @@ export async function getPopularTags() {
   }
 }
 
-export async function getTopInteractedTags(params: {
-  userId: string;
-  limit?: number;
-}) {
+export async function getTopInteractedTags(params: GetTopInteractedTagProps) {
   try {
     connectToDatabase();
     const { userId, limit = 3 } = params;
@@ -50,11 +52,7 @@ export async function getTopInteractedTags(params: {
   }
 }
 
-export async function getAllTags(params: {
-  searchQuery: string;
-  filter: TagsFilter;
-  pageNo: number;
-}) {
+export async function getAllTags(params: GetAllTagsProps) {
   try {
     await connectToDatabase();
     const { searchQuery, filter, pageNo } = params;
@@ -106,12 +104,7 @@ export async function getAllTags(params: {
   }
 }
 
-export async function getQuestionByTagId(params: {
-  tagId: string;
-  searchQuery: string;
-  filter: TagQuestionFilter;
-  pageNo: number;
-}) {
+export async function getQuestionByTagId(params: getQuestionsByTagIdProps) {
   try {
     await connectToDatabase();
     const { searchQuery, tagId, filter, pageNo } = params;

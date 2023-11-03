@@ -1,11 +1,9 @@
 "use server";
 import { connectToDatabase } from "../mongoose";
 import * as Models from ".././model";
+import { ViewQuestionProps } from "@/types/action";
 
-export async function viewQuestion(params: {
-  userId?: string;
-  questionId: string;
-}) {
+export async function viewQuestion(params: ViewQuestionProps) {
   try {
     await connectToDatabase();
 

@@ -1,14 +1,18 @@
 "use server";
 import { connectToDatabase } from "../mongoose";
 import * as Models from ".././model";
-import { Answer, AnswerFilter } from "@/types/shared";
+import { Answer, CreateAnswerParams } from "@/types/shared";
 import { revalidatePath } from "next/cache";
 import { getUserById } from ".";
+import {
+  DeleteAnswerProps,
+  DownvoteAnswerProps,
+  GetAllAnswerProps,
+  GetUsersAnswerProps,
+  UpvoteAnswerProps,
+} from "@/types/action";
 
-export async function getAllAnswer(params: {
-  questionId: string;
-  filter: AnswerFilter;
-}) {
+export async function getAllAnswer(params: GetAllAnswerProps) {
   try {
     connectToDatabase();
     const { filter, questionId } = params;
@@ -45,12 +49,7 @@ export async function getAllAnswer(params: {
   }
 }
 
-export async function createAnswer(params: {
-  clerkId: string;
-  questionId: string;
-  content: string;
-  path: string;
-}) {
+export async function createAnswer(params: CreateAnswerParams) {
   try {
     connectToDatabase();
     const { content, questionId, clerkId, path } = params;
@@ -77,13 +76,7 @@ export async function createAnswer(params: {
   }
 }
 
-export async function upvoteAnswers(params: {
-  answerId: string;
-  userId: string;
-  hasupVoted: boolean;
-  hasdownVoted: boolean;
-  path: string;
-}) {
+export async function upvoteAnswers(params: UpvoteAnswerProps) {
   try {
     connectToDatabase();
     const { hasdownVoted, hasupVoted, answerId, userId, path } = params;
@@ -120,13 +113,7 @@ export async function upvoteAnswers(params: {
   }
 }
 
-export async function downvoteAnswers(params: {
-  answerId: string;
-  userId: string;
-  hasupVoted: boolean;
-  hasdownVoted: boolean;
-  path: string;
-}) {
+export async function downvoteAnswers(params: DownvoteAnswerProps) {
   try {
     connectToDatabase();
     const { hasdownVoted, hasupVoted, answerId, userId, path } = params;
@@ -163,11 +150,7 @@ export async function downvoteAnswers(params: {
   }
 }
 
-export async function getUserAnswers(params: {
-  userId: string;
-  page: number;
-  pageSize: number;
-}) {
+export async function getUserAnswers(params: GetUsersAnswerProps) {
   try {
     const { userId, page = 1, pageSize = 10 } = params;
     connectToDatabase();
@@ -195,7 +178,7 @@ export async function getUserAnswers(params: {
   }
 }
 
-export async function deleteAnswer(params: { answerId: string; path: string }) {
+export async function deleteAnswer(params: DeleteAnswerProps) {
   try {
     connectToDatabase();
     const { answerId, path } = params;

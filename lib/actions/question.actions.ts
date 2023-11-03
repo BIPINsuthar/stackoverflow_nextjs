@@ -4,8 +4,17 @@ import { connectToDatabase } from "../mongoose";
 import * as Models from "../model";
 
 import { revalidatePath } from "next/cache";
-import { HomePageFilter, Question } from "@/types/shared";
-import console from "console";
+import { Question } from "@/types/shared";
+
+import {
+  CreateQuestionProps,
+  DeleteQuestionProps,
+  DownvoteQuestionProps,
+  GetAllQuestionsProps,
+  GetUserQuestionsProps,
+  UpdateQuestionProps,
+  UpvoteQuestionsProps,
+} from "@/types/action";
 
 export async function getHotQuestions() {
   try {
@@ -20,17 +29,11 @@ export async function getHotQuestions() {
   }
 }
 
-export async function getAllQuestion(params: {
-  searchQuery: string;
-  filter: HomePageFilter;
-  pageNo: number;
-}) {
+export async function getAllQuestion(params: GetAllQuestionsProps) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter, pageNo } = params;
-
-    const pageSize = 1;
+    const { searchQuery, filter, pageNo = 1, pageSize = 10 } = params;
 
     const skip = (pageNo - 1) * pageSize;
 
@@ -53,13 +56,15 @@ export async function getAllQuestion(params: {
         break;
     }
 
-    query = {
-      ...query,
-      $or: [
-        { title: { $regex: new RegExp(searchQuery, "i") } },
-        { content: { $regex: new RegExp(searchQuery, "i") } },
-      ],
-    };
+    if (searchQuery) {
+      query = {
+        ...query,
+        $or: [
+          { title: { $regex: new RegExp(searchQuery, "i") } },
+          { content: { $regex: new RegExp(searchQuery, "i") } },
+        ],
+      };
+    }
 
     const questions = await Models.Question.find(query)
       .populate({
@@ -93,13 +98,7 @@ export async function getAllQuestion(params: {
   }
 }
 
-export async function createQuestion(params: {
-  title: string;
-  content: string;
-  tags: string[];
-  author: string;
-  path: string;
-}) {
+export async function createQuestion(params: CreateQuestionProps) {
   try {
     connectToDatabase();
     const { title, content, tags, author, path } = params;
@@ -138,15 +137,8 @@ export async function createQuestion(params: {
     console.log("creating question", error);
   }
 }
-export async function updateQuestion(params: {
-  questionId: string;
-  updateData: Partial<{
-    title: string;
-    content: string;
-    tags: string[];
-  }>;
-  path: string;
-}) {
+
+export async function updateQuestion(params: UpdateQuestionProps) {
   try {
     connectToDatabase();
     const { questionId, updateData, path } = params;
@@ -159,6 +151,7 @@ export async function updateQuestion(params: {
     throw error;
   }
 }
+
 export async function getQuestionById(questionId: string) {
   try {
     const question = (await Models.Question.findById(questionId)
@@ -180,13 +173,7 @@ export async function getQuestionById(questionId: string) {
   }
 }
 
-export async function upvoteQuestions(params: {
-  questionId: string;
-  userId: string;
-  hasupVoted: boolean;
-  hasdownVoted: boolean;
-  path: string;
-}) {
+export async function upvoteQuestions(params: UpvoteQuestionsProps) {
   try {
     connectToDatabase();
     const { hasdownVoted, hasupVoted, questionId, userId, path } = params;
@@ -223,13 +210,7 @@ export async function upvoteQuestions(params: {
   }
 }
 
-export async function downvoteQuestions(params: {
-  questionId: string;
-  userId: string;
-  hasupVoted: boolean;
-  hasdownVoted: boolean;
-  path: string;
-}) {
+export async function downvoteQuestions(params: DownvoteQuestionProps) {
   try {
     connectToDatabase();
     const { hasdownVoted, hasupVoted, questionId, userId, path } = params;
@@ -266,11 +247,7 @@ export async function downvoteQuestions(params: {
   }
 }
 
-export async function getUserQuestions(params: {
-  userId: string;
-  page: number;
-  pageSize: number;
-}) {
+export async function getUserQuestions(params: GetUserQuestionsProps) {
   try {
     const { userId, page = 1, pageSize = 10 } = params;
     connectToDatabase();
@@ -296,10 +273,7 @@ export async function getUserQuestions(params: {
   }
 }
 
-export async function deleteQuestion(params: {
-  questionId: string;
-  path: string;
-}) {
+export async function deleteQuestion(params: DeleteQuestionProps) {
   try {
     connectToDatabase();
     const { questionId, path } = params;

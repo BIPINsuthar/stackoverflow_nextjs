@@ -138,3 +138,11 @@ export type QuestionPage = {
   params: QuestionParams;
   searchParams: QuestionSearchParams;
 };
+
+export type FilterType = "question" | "user" | "tag" | "answer";
+
+export interface GlobalSearchResult {
+  type: string;
+  id: string;
+  title: string;
+}
