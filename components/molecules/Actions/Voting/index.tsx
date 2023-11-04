@@ -5,6 +5,7 @@ import { Props } from "./types";
 import * as Actions from "../../../../lib/actions";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 export const Voting = ({
   count,
@@ -35,8 +36,15 @@ export const Voting = ({
       : "upvote";
 
   const handleVotes = async () => {
-    if (type == "answer") {
-      if (actionType == "downVote") {
+    if (!userId) {
+      return toast({
+        title: "Please log in",
+        description: "you must be logged in to perfrom this action",
+      });
+    }
+
+    if (actionType == "downVote") {
+      if (type == "answer") {
         await Actions.downvoteAnswers({
           hasdownVoted,
           hasupVoted,
@@ -45,21 +53,25 @@ export const Voting = ({
           userId,
         });
       } else {
-        await Actions.upvoteAnswers({
-          hasdownVoted,
-          hasupVoted,
-          path,
-          answerId: itemId,
-          userId,
-        });
-      }
-    } else {
-      if (actionType == "downVote") {
         await Actions.downvoteQuestions({
           hasdownVoted,
           hasupVoted,
           path,
           questionId: itemId,
+          userId,
+        });
+      }
+      return toast({
+        title: `Downvote ${!hasdownVoted ? "Successfully" : "Removed"}`,
+        variant: !hasdownVoted ? "default" : "destructive",
+      });
+    } else {
+      if (type == "answer") {
+        await Actions.upvoteAnswers({
+          hasdownVoted,
+          hasupVoted,
+          path,
+          answerId: itemId,
           userId,
         });
       } else {
@@ -71,6 +83,10 @@ export const Voting = ({
           userId,
         });
       }
+      return toast({
+        title: `Upvote ${!hasupVoted ? "Successfully" : "Removed"}`,
+        variant: !hasupVoted ? "default" : "destructive",
+      });
     }
   };
 

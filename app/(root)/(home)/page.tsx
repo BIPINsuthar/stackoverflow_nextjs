@@ -13,6 +13,7 @@ import * as Actions from "../../../lib/actions";
 import Link from "next/link";
 import { HomePageSearchParams } from "@/types/shared";
 import { Filter } from "./Components/Filter";
+import Loading from "./loading";
 
 const Home = async ({
   searchParams,

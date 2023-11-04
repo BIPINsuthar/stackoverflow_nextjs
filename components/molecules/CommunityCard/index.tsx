@@ -9,7 +9,7 @@ export const CommunityCard = async ({
   userId,
 }: Props) => {
   return (
-    <div className="flex border w-fit items-center light-border-2 h-fit max-w-[260px] shadow-light100_dark100 flex-col gap-4 rounded-lg p-4">
+    <div className="flex border w-fit items-center light-border-2 h-fit max-w-[250px] shadow-light100_dark100 flex-col gap-4 rounded-lg p-4">
       <Image
         src={picture}
         width={100}

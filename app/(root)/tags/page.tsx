@@ -6,6 +6,7 @@ import Link from "next/link";
 import { PaginationBox, SearchBar } from "@/components/molecules";
 import { TagSearchParams } from "@/types/shared";
 import { TagFilter } from "./Components/TagFilter";
+import Loading from "./loading";
 
 const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
   const results = await Actions.getAllTags({
@@ -22,7 +23,7 @@ const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
         <TagFilter type="tag" />
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-4 flex-wrap">
         {results.tagList.map((item) => {
           return (
             <Link href={`/tags/${item._id}`}>
