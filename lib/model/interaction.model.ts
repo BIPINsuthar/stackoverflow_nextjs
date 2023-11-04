@@ -19,4 +19,4 @@ const InteractionSchema = new Schema({
 });
 
 export const Interaction =
-  models.Interaction || model("Interaction", InteractionSchema);
+  models?.Interaction || model("Interaction", InteractionSchema);

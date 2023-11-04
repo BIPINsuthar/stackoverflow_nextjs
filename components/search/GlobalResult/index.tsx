@@ -12,7 +12,7 @@ export const GlobalResult = () => {
   const type = searchParams.get("type") as FilterType;
 
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -26,7 +26,9 @@ export const GlobalResult = () => {
           type: type,
         });
 
-        setResults(result);
+        if (result) {
+          setResults(result);
+        }
       } catch (error) {
         throw error;
       } finally {
@@ -39,8 +41,19 @@ export const GlobalResult = () => {
     }
   }, [global, type]);
 
-  const renderLink = (type: string, id: string) => {
-    return "/";
+  const renderLink = (type: FilterType, id: string) => {
+    switch (type) {
+      case "answer":
+        return `/question/${id}`;
+      case "question":
+        return `/question/${id}`;
+      case "tag":
+        return `/tags/${id}`;
+      case "user":
+        return `/profile/${id}`;
+      default:
+        return "/";
+    }
   };
 
   return (
@@ -48,15 +61,14 @@ export const GlobalResult = () => {
       <p className="body-semibold text-dark200_light800 line-clamp-1">
         Top Match
       </p>
-      <div className="px-6 flex flex-col gap-4 h-full">
+      <>
         {results.length != 0 ? (
           results.map((item, index) => {
             return (
               <Link
-                // onClick={() => setOpen(false)}
                 key={item.type + item.id}
                 className="flex items-start gap-3 cursor-pointer"
-                href={renderLink("", "")}
+                href={renderLink(item.type, item.id)}
               >
                 <Icons type="tag" className="reverse-colors mt-1" />
                 <div className="flex flex-col gap-1">
@@ -68,6 +80,8 @@ export const GlobalResult = () => {
               </Link>
             );
           })
+        ) : isLoading ? (
+          <p className="text-red-400">I'M loading </p>
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-dark200_light800 body-regular">
@@ -75,7 +89,7 @@ export const GlobalResult = () => {
             </p>
           </div>
         )}
-      </div>
+      </>
     </div>
   );
 };

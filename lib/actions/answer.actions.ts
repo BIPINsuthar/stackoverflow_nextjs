@@ -70,6 +70,24 @@ export async function createAnswer(params: CreateAnswerParams) {
       },
     });
 
+    //ass answer to the questions's answer array
+    const question = await Models.Question.findByIdAndUpdate(questionId, {
+      $push: { $answers: newAnswer._id },
+    });
+
+    //add interactions
+    await Models.Interaction.create({
+      user: user._id,
+      action: "answer",
+      question,
+      answer: newAnswer._id,
+      tags: question.tags,
+    });
+    //Increment author reputation Give an answer (+10)
+    await Models.User.findByIdAndUpdate(user._id, {
+      $inc: { reputation: 10 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     throw error;
@@ -96,17 +114,26 @@ export async function upvoteAnswers(params: UpvoteAnswerProps) {
       updateQuery = { $addToSet: { upvotes: userId } };
     }
 
-    const answer = await Models.Answer.findByIdAndUpdate(
+    const answer = (await Models.Answer.findByIdAndUpdate(
       answerId,
       updateQuery,
       {
         new: true,
       }
-    );
+    )) as Answer;
 
     if (!answer) throw new Error("Answer not found!");
 
-    //increment auther reputation
+    //increment auther reputation Upvoting another user's answer (+2)
+    await Models.User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -2 : 2 },
+    });
+
+    // Receiving an upvote from another user (+10)
+    await Models.User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     throw error;
@@ -144,6 +171,17 @@ export async function downvoteAnswers(params: DownvoteAnswerProps) {
     if (!answer) throw new Error("Answer not found!");
 
     //increment auther reputation
+
+    //descrease auther reputation Upvoting another user's answer (+2)
+    await Models.User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownVoted ? 2 : -2 },
+    });
+
+    // Receiving an downvote from another user (+10)
+    await Models.User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasdownVoted ? 10 : -10 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     throw error;

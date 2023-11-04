@@ -103,11 +103,11 @@ export async function createQuestion(params: CreateQuestionProps) {
     connectToDatabase();
     const { title, content, tags, author, path } = params;
 
-    const question = await Models.Question.create({
+    const question = (await Models.Question.create({
       title,
       content,
       author,
-    });
+    })) as Question;
 
     const tagDocuments = [];
 
@@ -132,6 +132,19 @@ export async function createQuestion(params: CreateQuestionProps) {
     await Models.Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     });
+
+    //create an interaction record for user's ask_question action
+    await Models.Interaction.create({
+      user: author,
+      action: "ask_question",
+      question: question._id,
+      tags: tagDocuments,
+    });
+    //Increment author reputation Asking a question (+5)
+    await Models.User.findByIdAndUpdate(author, {
+      $inc: { reputation: 5 },
+    });
+
     revalidatePath(path);
   } catch (error: any) {
     console.log("creating question", error);
@@ -203,7 +216,16 @@ export async function upvoteQuestions(params: UpvoteQuestionsProps) {
 
     if (!question) throw new Error("Question not found!");
 
+    //Upvoting another user's question (+1)
+    await Models.User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -1 : 1 },
+    });
+
     //increment auther reputation
+    await Models.User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     throw error;
@@ -240,7 +262,14 @@ export async function downvoteQuestions(params: DownvoteQuestionProps) {
 
     if (!question) throw new Error("Question not found!");
 
-    //increment auther reputation
+    await Models.User.findByIdAndUpdate(userId, {
+      $inc: { reputation: -1 },
+    });
+
+    //descrement auther reputation
+    await Models.User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: -2 },
+    });
     revalidatePath(path);
   } catch (error) {
     throw error;

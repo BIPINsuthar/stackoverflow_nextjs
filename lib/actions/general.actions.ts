@@ -1,85 +1,104 @@
-import { FilterType } from "@/types/shared";
-import { Model } from "mongoose";
+"use server";
+import { FilterType, GlobalSearchResult } from "@/types/shared";
 
 import * as Models from "../model";
+
+import { connectToDatabase } from "../mongoose";
+import { ModelAndTypesProps } from "@/types/action";
 
 export async function globalSearch(params: {
   type: FilterType | null;
   global: string | null;
 }) {
-  const { global, type } = params;
+  try {
+    connectToDatabase();
 
-  const searchQuery = { $regex: global };
+    const { global, type } = params;
 
-  const globalModel: {
-    model: Model<any, {}, {}, {}, any, any>;
-    searchField: string;
-    type: string;
-  }[] = [
-    {
-      model: Models.Question,
-      searchField: "title",
-      type: "question",
-    },
-    {
-      model: Models.Answer,
-      searchField: "content",
-      type: "answer",
-    },
-    {
-      model: Models.User,
-      searchField: "name",
-      type: "user",
-    },
-    {
-      model: Models.Tag,
-      searchField: "name",
-      type: "tag",
-    },
-  ];
+    const searchQuery = { $regex: global, $options: "i" };
 
-  if (type) {
-    //send 8 records
-    const results = await globalModel.find((item) => item.type === type);
+    let results: GlobalSearchResult[] = [];
 
-    if (!results) {
-      throw new Error("wrong model");
-    }
+    const modelAndTypes: ModelAndTypesProps[] = [
+      {
+        model: Models.Question,
+        searchField: "title",
+        type: "question",
+      },
+      {
+        model: Models.Answer,
+        searchField: "content",
+        type: "answer",
+      },
+      {
+        model: Models.User,
+        searchField: "name",
+        type: "user",
+      },
+      {
+        model: Models.Tag,
+        searchField: "name",
+        type: "tag",
+      },
+    ];
 
-    const output = await results?.model
-      .find({
-        [results.searchField]: searchQuery,
-      })
-      .limit(8);
+    if (type) {
+      //SEARCH IN THE SPECIFIED MODEL TYPE
+      const modelInfo = await modelAndTypes.find((item) => item.type === type);
 
-    const finalResults = output?.map((item) => ({
-      id: item._id,
-      title: item[results.searchField],
-      type,
-    }));
+      if (!modelInfo) {
+        throw new Error("Invalid search Type");
+      }
 
-    return finalResults;
-  } else {
-    //send each item 2 records
-
-    const finalResults: { id: string; title: string; type: string }[] = [];
-
-    for (const { model, searchField, type } of globalModel) {
-      const result = await model
+      const queryResults = await modelInfo?.model
         .find({
-          [searchField]: searchQuery,
+          [modelInfo.searchField]: searchQuery,
         })
-        .limit(2);
+        .limit(8);
 
-      result.map((item) => {
-        finalResults.push({
-          id: item._id,
-          title: item[searchField],
-          type,
-        });
-      });
+      results = queryResults?.map((item) => ({
+        id:
+          type == "user"
+            ? item.clerkId
+            : type == "answer"
+            ? item.question
+            : item._id,
+        title:
+          type == "answer"
+            ? `Answers containig ${global}`
+            : item[modelInfo.searchField],
+        type,
+      }));
+      return results;
+    } else {
+      //SEARCH ACROSS EVERYTHING
+
+      for (const { model, searchField, type } of modelAndTypes) {
+        const queryResults = await model
+          .find({
+            [searchField]: searchQuery,
+          })
+          .limit(2);
+
+        results.push(
+          ...queryResults.map((item) => ({
+            id:
+              type == "user"
+                ? item.clerkId
+                : type == "answer"
+                ? item.question
+                : item._id,
+            title:
+              type == "answer"
+                ? `Answers containig ${global}`
+                : item[searchField],
+            type,
+          }))
+        );
+        return results;
+      }
     }
-
-    return finalResults;
+  } catch (error) {
+    throw error;
   }
 }

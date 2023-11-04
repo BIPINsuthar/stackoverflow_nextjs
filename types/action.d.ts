@@ -1,4 +1,6 @@
+import { Model } from "mongoose";
 import * as Models from "../lib/model";
+import { FilterType } from "./shared";
 
 export type CreateUserProps = Partial<Models.IUser>;
 
@@ -132,4 +134,10 @@ export interface GetUsersAnswerProps {
 export interface DeleteAnswerProps {
   answerId: string;
   path: string;
+}
+
+export interface ModelAndTypesProps {
+  model: Model<any, {}, {}, {}, any, any>;
+  searchField: string;
+  type: FilterType;
 }
