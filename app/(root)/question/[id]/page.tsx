@@ -3,14 +3,14 @@ import React from "react";
 import * as Actions from "../../../../lib/actions";
 
 import { FeedbackCenter, Time, Voting } from "@/components/molecules/Actions";
-import { Filter, UserInfo } from "@/components/molecules";
+import { UserInfo } from "@/components/molecules";
 import { Tag } from "@/components/molecules/Badges";
 import { ParseHtml } from "@/components/shared";
 import { Answer } from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
 import { SavedQuestion } from "../Components/savedQuestion";
 import { AnswerFilter } from "../Components/AnswerFilter";
-import { QuestionPage } from "@/types/shared";
+import { QuestionPage, User } from "@/types/shared";
 
 const Question = async ({ params, searchParams }: QuestionPage) => {
   const { userId: clerkId } = auth();
@@ -22,7 +22,11 @@ const Question = async ({ params, searchParams }: QuestionPage) => {
     filter: searchParams.filter,
   });
 
-  const user = await Actions.getUserById(clerkId!);
+  let user: User | null = null;
+
+  if (clerkId) {
+    user = await Actions.getUserById(clerkId!);
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6">
@@ -36,25 +40,27 @@ const Question = async ({ params, searchParams }: QuestionPage) => {
         <div className="flex items-center gap-2 ">
           <Voting
             itemId={question._id}
-            hasdownVoted={question.downvotes.includes(user._id)}
-            hasupVoted={question.upvotes.includes(user._id)}
-            userId={user._id}
+            hasdownVoted={question.downvotes.includes(user?._id)}
+            hasupVoted={question.upvotes.includes(user?._id)}
+            userId={user?._id}
             actionType="upVote"
             count={question.upvotes.length}
           />
           <Voting
             itemId={question._id}
-            hasdownVoted={question.downvotes.includes(user._id)}
-            hasupVoted={question.upvotes.includes(user._id)}
-            userId={user._id}
+            hasdownVoted={question.downvotes.includes(user?._id)}
+            hasupVoted={question.upvotes.includes(user?._id)}
+            userId={user?._id}
             actionType="downVote"
             count={question.downvotes.length}
           />
-          <SavedQuestion
-            questionId={question._id}
-            hasSaved={user.savedQuestions?.includes(question._id)}
-            userId={user._id}
-          />
+          {user && (
+            <SavedQuestion
+              questionId={question._id}
+              hasSaved={user?.savedQuestions?.includes(question._id)}
+              userId={user?._id}
+            />
+          )}
         </div>
       </div>
       <h2 className="h2-semibold text-dark200_light900">{question.title}</h2>
@@ -91,18 +97,18 @@ const Question = async ({ params, searchParams }: QuestionPage) => {
                 <div className="flex items-center gap-2 ">
                   <Voting
                     itemId={item._id}
-                    hasdownVoted={item.downvotes.includes(user._id)}
-                    hasupVoted={item.upvotes.includes(user._id)}
-                    userId={user._id}
+                    hasdownVoted={item.downvotes.includes(user?._id)}
+                    hasupVoted={item.upvotes.includes(user?._id)}
+                    userId={user?._id}
                     actionType="upVote"
                     count={item.upvotes.length}
                     type="answer"
                   />
                   <Voting
                     itemId={item._id}
-                    hasdownVoted={item.downvotes?.includes(user._id)}
-                    hasupVoted={item.upvotes?.includes(user._id)}
-                    userId={user._id}
+                    hasdownVoted={item.downvotes?.includes(user?._id)}
+                    hasupVoted={item.upvotes?.includes(user?._id)}
+                    userId={user?._id}
                     actionType="downVote"
                     count={item.downvotes.length}
                     type="answer"
@@ -114,7 +120,7 @@ const Question = async ({ params, searchParams }: QuestionPage) => {
           );
         })}
       </div>
-      <Answer questionId={question._id} />
+      {user && <Answer question={question.title} questionId={question._id} />}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import {
   CommunityCard,
-  Filter,
   PaginationBox,
   SearchBar,
 } from "@/components/molecules";
@@ -9,7 +8,6 @@ import * as Actions from "../../../lib/actions";
 import Link from "next/link";
 import { UserFilter } from "./Components/UserFilter";
 import { CommunitySearchParams } from "@/types/shared";
-import Loading from "./loading";
 
 const Communities = async ({
   searchParams,
@@ -19,7 +17,7 @@ const Communities = async ({
   const results = await Actions.getAllUsers({
     searchQuery: searchParams.search,
     filter: searchParams.filter,
-    pageNo: searchParams.page ?? 1,
+    pageNo: searchParams.page,
   });
 
   return (

@@ -7,9 +7,10 @@ import { Editor } from "@tinymce/tinymce-react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import * as Actions from "../../../../lib/actions";
+import * as Actions from "../../../lib/actions";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/context";
+import { toast } from "@/components/ui/use-toast";
 
 interface AskQustionProps {
   questionTitle: string;
@@ -66,6 +67,10 @@ export const Question = ({
             path: pathName!,
           });
           router.push("/");
+
+          return toast({
+            title: "Question updated successfully",
+          });
         } else {
           await Actions.createQuestion({
             title: values.questionTitle,
@@ -75,8 +80,11 @@ export const Question = ({
             path: pathName!,
           });
         }
-
         router.push("/");
+
+        return toast({
+          title: "Question created successfully",
+        });
       } catch (error) {
         console.log("error while creating question or updating", error);
       }

@@ -4,7 +4,11 @@ import { useTheme } from "@/context";
 import Image from "next/image";
 import Link from "next/link";
 
-export const EmptyQuestions = () => {
+export interface Props {
+  type?: "collection" | "home";
+}
+
+export const EmptyQuestions = ({ type }: Props) => {
   const { mode } = useTheme();
 
   return (
@@ -18,15 +22,25 @@ export const EmptyQuestions = () => {
         alt="Image"
       />
       <h2 className="h2-bold text-dark200_light800">
-        There’s no question to show
+        {type == "collection"
+          ? "No Saved Questions Found"
+          : "There’s no question to show"}
       </h2>
       <p className="body-regular text-dark500_light700 text-center max-w-sm">
-        Be the first to break the silence! 🚀 Ask a Question and kickstart the
-        discussion. our query could be the next big thing others learn from. Get
-        involved! 💡
+        {type == "collection"
+          ? `Be the first to break the silence! 🚀 Ask a Question and kickstart the
+          discussion. our query could be the next big thing others learn from. Get
+          involved! 💡 `
+          : `It appears that there are no saved questions in your
+          collection at the moment 😔.Start exploring and saving questions that
+          pique your interest 🌟`}
       </p>
-      <Link href={"/ask-question"}>
-        <Button title="Ask a Question" type="gradient" width="fit" />
+      <Link href={`${type == "collection" ? "/" : "/ask-question"}`}>
+        <Button
+          title={type == "collection" ? "Explorer Questions" : "Ask a Question"}
+          type="gradient"
+          width="fit"
+        />
       </Link>
     </section>
   );

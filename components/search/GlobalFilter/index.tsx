@@ -5,9 +5,10 @@ import { useState } from "react";
 export const GlobalFilter = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const type = searchParams.get("type");
   const Filter = ["Question", "Answer", "User", "Tag"];
-  const [filter, setFilter] = useState("");
+
+  const [filter, setFilter] = useState(type ?? "");
 
   const handleTypeChange = (item: string) => {
     if (item === filter) {

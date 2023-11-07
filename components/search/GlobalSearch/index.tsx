@@ -18,7 +18,7 @@ export const GlobalSearch = () => {
   const searchValue = searchParams.get("search");
 
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchValue ?? "");
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

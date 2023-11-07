@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useFormik } from "formik";
 
 import { Props } from "./types";
+import { toast } from "@/components/ui/use-toast";
 
 export const EditProfileForm = ({
   fullName,
@@ -51,6 +52,9 @@ export const EditProfileForm = ({
             location: values.location,
             bio: values.bio,
           },
+        });
+        return toast({
+          title: `User detail updated successfully`,
         });
       } catch (error) {
         console.log("while updating user", error);

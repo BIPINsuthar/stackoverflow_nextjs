@@ -6,7 +6,7 @@ import {
   PaginationBox,
   SearchBar,
 } from "@/components/molecules";
-import { CollectionSearchParams, SearchParams } from "@/types/shared";
+import { CollectionSearchParams } from "@/types/shared";
 import { CollectionsFilter } from "./Components/CollectionsFilter";
 
 const Collections = async ({
@@ -16,12 +16,16 @@ const Collections = async ({
 }) => {
   const { userId } = auth();
 
-  const results = await Actions.allSavedQuestions({
-    userId: userId!,
-    searchQuery: searchParams.search,
-    filter: searchParams.filter,
-    pageNo: searchParams.page ?? 1,
-  });
+  let results = null;
+
+  if (userId) {
+    results = await Actions.allSavedQuestions({
+      userId: userId,
+      searchQuery: searchParams.search,
+      filter: searchParams.filter,
+      pageNo: searchParams.page,
+    });
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -30,9 +34,8 @@ const Collections = async ({
         <SearchBar route={"/collection"} placeholder="Search for questions" />
         <CollectionsFilter />
       </div>
-      {results.questions?.map((item) => {
+      {results?.questions?.map((item) => {
         return (
-          // <Link href={`/question/${item._id}`}>
           <QuestionCard
             title={item.title}
             user={{
@@ -48,14 +51,15 @@ const Collections = async ({
               votes: item.upvotes.length,
             }}
           />
-          // </Link>
         );
       })}
-      {results.totalQuestions == 0 && <EmptyQuestions />}
-      <PaginationBox
-        isNext={results.isNext}
-        currentPage={searchParams.page ? searchParams.page : 1}
-      />
+      {results?.questions.length == 0 && <EmptyQuestions type="collection" />}
+      {results && results?.questions.length != 0 && (
+        <PaginationBox
+          isNext={results?.isNext ?? false}
+          currentPage={searchParams.page ? searchParams.page : 1}
+        />
+      )}
     </div>
   );
 };

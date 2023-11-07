@@ -20,10 +20,12 @@ export const Voting = ({
   const router = useRouter();
 
   useEffect(() => {
-    Actions.viewQuestion({
-      userId: userId ? userId : undefined,
-      questionId: itemId,
-    });
+    if (userId) {
+      Actions.viewQuestion({
+        userId: userId ? userId : undefined,
+        questionId: itemId,
+      });
+    }
   }, [userId, itemId, path, router]);
 
   const icon =

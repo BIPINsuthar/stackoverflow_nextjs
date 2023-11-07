@@ -7,6 +7,7 @@ import moment from "moment";
 import { TopAnswers } from "../Components/TopAnswers";
 import { TopQuestions } from "../Components/TopQuestions";
 import { SwitchButton } from "../Components/SwitchButton";
+import Loading from "./loading";
 
 // @ts-ignore
 const Profile = async ({ params }) => {
@@ -53,7 +54,7 @@ const Profile = async ({ params }) => {
         Stars
       </h3>
       <div className="flex items-center gap-4 flex-wrap">
-        <section className="background-light900_dark200 light-border border px-6 py-4 flex itemce gap-10 rounded-lg w-full max-w-[240px] max-sm:max-w-full">
+        <section className="background-light900_dark200 light-border border p-[22.5px] flex itemce gap-10 rounded-lg w-full max-w-[240px] max-sm:max-w-full">
           <div className="flex flex-col gap-2">
             <p className="paragraph-semibold text-dark200_light900">
               {userInfo.totalQuestions}

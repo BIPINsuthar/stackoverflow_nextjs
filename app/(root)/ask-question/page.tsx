@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Question } from "./Question";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import * as Actions from "../../../lib/actions";
+import { Question } from "@/components/forms/Question";
 
 const AskQuestions = async () => {
   const { userId } = auth();

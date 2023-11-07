@@ -13,7 +13,6 @@ import * as Actions from "../../../lib/actions";
 import Link from "next/link";
 import { HomePageSearchParams } from "@/types/shared";
 import { Filter } from "./Components/Filter";
-import Loading from "./loading";
 
 const Home = async ({
   searchParams,
@@ -26,7 +25,7 @@ const Home = async ({
   const result = await Actions.getAllQuestion({
     searchQuery: search,
     filter: filter,
-    pageNo: searchParams.page ?? 1,
+    pageNo: searchParams.page,
   });
 
   return (

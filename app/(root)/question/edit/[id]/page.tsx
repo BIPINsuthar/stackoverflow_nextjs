@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import * as Actions from "../../../../../lib/actions";
-import { Question } from "@/app/(root)/ask-question/Question";
+import { Question } from "@/components/forms/Question";
 
 // @ts-ignore
 const EditQuestion = async ({ params }) => {

@@ -4,17 +4,20 @@ import { Button } from "@/components/molecules";
 import { useTheme } from "@/context";
 import { Editor } from "@tinymce/tinymce-react";
 import { useFormik } from "formik";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import * as Actions from "../../../lib/actions";
 
 import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { Props } from "./types";
+import { toast } from "@/components/ui/use-toast";
 
-export const Answer = ({ questionId }: Props) => {
+export const Answer = ({ questionId, question }: Props) => {
   const { userId: clerkId } = useAuth();
   const pathName = usePathname();
+
+  const [isIsSubmittingAI, setIsSubmittingAI] = useState(false);
 
   const { mode } = useTheme();
   const editorRef = useRef(null);
@@ -29,10 +32,38 @@ export const Answer = ({ questionId }: Props) => {
         clerkId: clerkId!,
         path: pathName,
       });
-
       formik.resetForm();
+
+      return toast({
+        title: `New answer added`,
+      });
     },
   });
+
+  const generateAIAnswer = async () => {
+    setIsSubmittingAI(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`,
+        {
+          method: "POST",
+          body: JSON.stringify({ question }),
+        }
+      );
+      const aiAnswer = response.json();
+      // const formattedAnswer = aiAnswer?.reply.replace("/\n/g", "<br/>");
+
+      // if (editorRef.current) {
+      //   const editor = editorRef.current as any;
+      //   editor.setContent("new content");
+      // }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsSubmittingAI(false);
+    }
+  };
 
   return (
     <section className="flex flex-col gap-4">
@@ -40,11 +71,20 @@ export const Answer = ({ questionId }: Props) => {
         <p className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </p>
-        <div className="flex cursor-pointer background-light800_dark300 items-center gap-1 rounded-md light-border border px-4 py-3 w-fit">
-          <Icons type="stars" size={12} />
-          <p className="primary-text-gradient small-medium">
-            Generate AI Answer
-          </p>
+        <div
+          onClick={generateAIAnswer}
+          className="flex cursor-pointer background-light800_dark300 items-center gap-1 rounded-md light-border border px-4 py-3 w-fit"
+        >
+          {isIsSubmittingAI ? (
+            <p className="primary-text-gradient small-medium">Generating....</p>
+          ) : (
+            <>
+              <Icons type="stars" size={12} />
+              <p className="primary-text-gradient small-medium">
+                Generate AI Answer
+              </p>
+            </>
+          )}
         </div>
       </div>
       <Editor
@@ -52,12 +92,10 @@ export const Answer = ({ questionId }: Props) => {
         apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
         initialValue={formik.values.problemExplanation}
         onBlur={formik.handleBlur}
-        onChange={(value) => {
-          formik.setFieldValue("problemExplanation", value, false);
+        onEditorChange={(content) => {
+          formik.setFieldValue("problemExplanation", content, false);
+          console.log("onEditorChange", content);
         }}
-        onEditorChange={(content) =>
-          formik.setFieldValue("problemExplanation", content, false)
-        }
         onInit={(evt, editor) => {
           // @ts-ignore
           editorRef.current = editor;

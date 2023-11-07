@@ -12,15 +12,17 @@ export interface UpdateUserParams {
 
 export interface GetAllUserProps {
   searchQuery: string;
-  filter: CommunityFilter;
-  pageNo: number;
+  filter?: CommunityFilter;
+  pageNo?: number;
+  pageSize?: number;
 }
 
 export interface AllSavedQuestionsProps {
   userId: string;
   searchQuery?: string;
-  filter: CollectionFilter;
-  pageNo: number;
+  filter?: CollectionFilter;
+  pageNo?: number;
+  pageSize?: number;
 }
 
 export interface GetTopInteractedTagProps {
@@ -30,15 +32,17 @@ export interface GetTopInteractedTagProps {
 
 export interface GetAllTagsProps {
   searchQuery: string;
-  filter: TagsFilter;
-  pageNo: number;
+  filter?: TagsFilter;
+  pageNo?: number;
+  pageSize?: number;
 }
 
 export interface getQuestionsByTagIdProps {
   tagId: string;
   searchQuery: string;
-  filter: TagQuestionFilter;
-  pageNo: number;
+  filter?: TagQuestionFilter;
+  pageNo?: number;
+  pageSize?: number;
 }
 
 export interface GetAllQuestionsProps {

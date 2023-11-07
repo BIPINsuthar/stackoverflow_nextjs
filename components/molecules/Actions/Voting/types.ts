@@ -1,7 +1,7 @@
 export interface Props {
   type?: "answer" | "question";
   count: number;
-  userId: string;
+  userId: string | null | undefined;
   itemId: string;
   hasupVoted: boolean;
   hasdownVoted: boolean;

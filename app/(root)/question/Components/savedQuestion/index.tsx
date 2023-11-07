@@ -5,6 +5,7 @@ import { Icons } from "@/components/atoms";
 import * as Actions from "../../../../../lib/actions";
 import { usePathname } from "next/navigation";
 import { Props } from "./types";
+import { toast } from "@/components/ui/use-toast";
 
 export const SavedQuestion = ({ questionId, userId, hasSaved }: Props) => {
   const path = usePathname();
@@ -14,6 +15,17 @@ export const SavedQuestion = ({ questionId, userId, hasSaved }: Props) => {
       className="cursor-pointer"
       onClick={async () => {
         await Actions.saveQuetion(questionId, userId!, path);
+
+        if (hasSaved) {
+          return toast({
+            title: `Question removed from the favourite`,
+            variant: "destructive",
+          });
+        } else {
+          return toast({
+            title: `Question added into favourite`,
+          });
+        }
       }}
     >
       <Icons type={hasSaved ? "star-filled" : "star-red"} size={18} />

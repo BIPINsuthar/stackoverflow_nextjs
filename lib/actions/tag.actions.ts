@@ -55,9 +55,7 @@ export async function getTopInteractedTags(params: GetTopInteractedTagProps) {
 export async function getAllTags(params: GetAllTagsProps) {
   try {
     await connectToDatabase();
-    const { searchQuery, filter, pageNo } = params;
-
-    const pageSize = 1;
+    const { searchQuery, filter, pageNo = 1, pageSize = 10 } = params;
 
     const skip = (pageNo - 1) * pageSize;
 
@@ -107,9 +105,7 @@ export async function getAllTags(params: GetAllTagsProps) {
 export async function getQuestionByTagId(params: getQuestionsByTagIdProps) {
   try {
     await connectToDatabase();
-    const { searchQuery, tagId, filter, pageNo } = params;
-
-    const pageSize = 1;
+    const { searchQuery, tagId, filter, pageNo = 1, pageSize = 10 } = params;
 
     const skip = (pageNo - 1) * pageSize;
 

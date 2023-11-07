@@ -11,7 +11,7 @@ const TagQuestions = async ({ params, searchParams }: TagQuestionPage) => {
     tagId: params.id,
     searchQuery: searchParams.search,
     filter: searchParams.filter,
-    pageNo: searchParams.page ?? 1,
+    pageNo: searchParams.page,
   });
 
   return (

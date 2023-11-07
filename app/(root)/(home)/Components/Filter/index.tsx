@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tag } from "@/components/molecules/Badges";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Props } from "./types";
-import { formUrlQuery, removeKeysFormUrl } from "@/lib/utils";
+import { formUrlQuery } from "@/lib/utils";
 
 export const Filter = ({ route }: Props) => {
   const [selectedItem, setSelectedItem] = useState("");

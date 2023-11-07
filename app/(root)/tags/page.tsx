@@ -6,7 +6,6 @@ import Link from "next/link";
 import { PaginationBox, SearchBar } from "@/components/molecules";
 import { TagSearchParams } from "@/types/shared";
 import { TagFilter } from "./Components/TagFilter";
-import Loading from "./loading";
 
 const Tags = async ({ searchParams }: { searchParams: TagSearchParams }) => {
   const results = await Actions.getAllTags({

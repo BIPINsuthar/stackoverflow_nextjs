@@ -139,9 +139,7 @@ export async function getAllUsers(params: GetAllUserProps) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter, pageNo } = params;
-
-    const pageSize = 1;
+    const { searchQuery, filter, pageNo = 1, pageSize = 10 } = params;
 
     const skip = (pageNo - 1) * pageSize;
 
@@ -194,11 +192,9 @@ export async function allSavedQuestions(params: AllSavedQuestionsProps) {
   try {
     connectToDatabase();
 
-    const { userId, searchQuery, filter, pageNo } = params;
+    const { userId, searchQuery, filter, pageNo = 1, pageSize = 1 } = params;
 
     let sortOptions = {};
-
-    const pageSize = 1;
 
     const skip = (pageNo - 1) * pageSize;
 
@@ -232,7 +228,7 @@ export async function allSavedQuestions(params: AllSavedQuestionsProps) {
       match: questionQuery,
       options: {
         skip: skip,
-        limit: pageSize,
+        limit: pageSize + 1,
         sort: sortOptions,
       },
       populate: [
@@ -249,7 +245,7 @@ export async function allSavedQuestions(params: AllSavedQuestionsProps) {
       author: user._id,
     });
 
-    const isNext = totalQuestions > skip + user.savedQuestions.length;
+    const isNext = user.savedQuestions.length > pageSize;
 
     return {
       questions: user.savedQuestions,
